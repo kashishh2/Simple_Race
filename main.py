@@ -156,7 +156,7 @@ class Game:
         self.curve_penalty_cooldown = max(0.0, self.curve_penalty_cooldown-dt)
         if self.curve_crash_timer >= 1.4 and self.curve_penalty_cooldown <= 0.0:
             bend_direction = 1.0 if curve > 0 else -1.0
-            self.player.lane_target = clamp(getattr(self.player, 'lane_target', self.player.lane) + bend_direction*0.32, -1.32, 1.32)
+            self.player.lane = clamp(self.player.lane + bend_direction*0.10, -1.32, 1.32)
             self.player.damage = min(99, self.player.damage+8)
             self.score = max(0, self.score-150)
             self.player.speed *= 0.82
