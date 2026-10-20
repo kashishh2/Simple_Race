@@ -26,10 +26,27 @@ class World:
         self.finish_line_reached = False
 
     def curve_at(self, distance):
-        for start, end, curve in self.curve_profile:
+        # Blend between track segments so bends visibly ease in and out.
+        idx = None
+        for i, (start, end, curve) in enumerate(self.curve_profile):
             if start <= distance < end:
-                return curve
-        return 0.0
+                idx = i
+                break
+        if idx is None:
+            return 0.0
+        start, end, current = self.curve_profile[idx]
+        blend = 140.0
+        if idx > 0 and distance < start + blend:
+            prev = self.curve_profile[idx-1][2]
+            t = max(0.0, min(1.0, (distance-start)/blend))
+            t = t*t*(3.0-2.0*t)
+            current = prev + (current-prev)*t
+        if idx+1 < len(self.curve_profile) and distance > end-blend:
+            nxt = self.curve_profile[idx+1][2]
+            t = max(0.0, min(1.0, (distance-(end-blend))/blend))
+            t = t*t*(3.0-2.0*t)
+            current = current + (nxt-current)*t
+        return current
 
     def update(self, player_speed, dt):
         if not self.finish_line_reached:
@@ -52,7 +69,7 @@ class World:
         # Road is fixed near the player; upcoming curve integral shifts the horizon.
         start = self.distance_traveled
         end = min(FINISH_LINE_DISTANCE, start + max(0.0, depth))
-        bend = self._curve_integral(start, end) * 0.10
+        bend = self._curve_integral(start, end) * 0.24
         return SCREEN_WIDTH/2 - bend * (1.0 - min(1.0, depth/MAX_VISIBLE_DEPTH)*0.35)
 
     def project(self, depth):
