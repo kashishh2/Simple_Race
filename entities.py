@@ -253,12 +253,12 @@ class Rival(Car):
         self.name = f"RIDER {index+1}"
         self.rider_color = self.COLORS[index % len(self.COLORS)]
         self.color = self.rider_color
-        self.base_width = random.randint(66,82)
-        self.base_height = random.randint(44,54)
+        self.base_width = random.randint(92,112)
+        self.base_height = random.randint(48,60)
         self.skill = random.uniform(0.88,1.12)
         self.aggression = random.uniform(0.35,0.95)
         self.change_timer = random.uniform(1.8,3.2)
-        self.target_speed = random.uniform(165, 205) * self.skill
+        self.target_speed = random.uniform(155, 198) * self.skill
         self.stamina = 100.0
         self.stunned = 0.0
         self.finished = False
@@ -280,15 +280,18 @@ class Rival(Car):
         # A small, bounded catch-up adjustment keeps races close without mirroring
         # the player's speed or position.
         gap = self.progress - player_progress
-        target_speed = self.target_speed
+        curve_load = min(1.0, abs(curve))
+        # AI brakes for bends based on corner severity.
+        corner_speed = 220.0 - curve_load * 105.0
+        target_speed = min(self.target_speed, corner_speed)
         if gap < -420:
             target_speed += 7.0
         elif gap > 520:
             target_speed -= 5.0
         target_speed = clamp(target_speed, 125.0, 222.0)
         if self.stunned <= 0:
-            acceleration = 19.0 if self.speed < target_speed else 0.0
-            deceleration = 6.5 if self.speed > target_speed else 0.0
+            acceleration = 15.0 if self.speed < target_speed else 0.0
+            deceleration = (30.0 if curve_load > 0.45 else 10.0) if self.speed > target_speed else 0.0
             self.speed += (acceleration - deceleration) * dt
             self.speed = min(target_speed, self.speed)
 
