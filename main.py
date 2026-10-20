@@ -37,8 +37,8 @@ class Game:
 
     def _reset_grid(self):
         # Staggered grid: opponents occupy multiple rows and lanes, not a single line ahead.
-        offsets=[-18, 0, 22, 43]
-        lanes=[-0.55, 0.15, 0.58, -0.12]
+        offsets=[-18, 0, 22, 43, 64]
+        lanes=[-0.55, 0.15, 0.58, -0.12, -0.62]
         for i,r in enumerate(self.rivals):
             r.set_grid_position(0.0,offsets[i],lanes[i])
         self.player.progress=0.0
@@ -155,8 +155,9 @@ class Game:
         if self.world.finish_line_reached:
             self.player.progress=FINISH_LINE_DISTANCE
             self.state="FINISHED"
-            self.finish_order=sorted([("YOU",self.player.progress)]+[(r.name,r.progress) for r in self.rivals],key=lambda p:p[1],reverse=True)
+            self.finish_order=sorted([("YOU", self.player.progress, self.score)] + [(r.name, r.progress, 0) for r in self.rivals], key=lambda item:item[1], reverse=True)
         elif self.time_left<=0 or self.player.damage>=100:
+            self.finish_order=sorted([("YOU", self.player.progress, self.score)] + [(r.name, r.progress, 0) for r in self.rivals], key=lambda item:item[1], reverse=True)
             self.state="GAMEOVER"
 
     def _draw_race(self):
@@ -188,7 +189,7 @@ class Game:
         self.player.draw_player(self.screen,player_center)
         remaining=max(0,FINISH_LINE_DISTANCE-self.player.progress)
         self.hud.draw(self.screen,self.time_left,self.player.speed,self.score,
-                      self._current_position(),RIVAL_COUNT+1,remaining,self.player.nitro,self.player.damage)
+                      self._current_position(),RIVAL_COUNT+1,remaining,self.player.nitro,self.player.damage,self.vehicle_type)
         self.world.draw_minimap(self.screen,self.rivals,self.player.progress)
 
         if self.state=="COUNTDOWN":
@@ -231,11 +232,18 @@ class Game:
         shade.fill((5,8,20,200)); self.screen.blit(shade,(0,0))
         title="YOU WIN!" if self.state=="FINISHED" else "RACE OVER"
         self.font.draw(self.screen,title,270,175,6,COLOR_YELLOW)
-        self.font.draw(self.screen,f"POSITION {self._current_position()}/{RIVAL_COUNT+1}",250,270,3,COLOR_WHITE)
-        self.font.draw(self.screen,"SCORE",330,325,3,COLOR_CYAN)
-        self.font.number(self.screen,self.score,350,360,5,COLOR_WHITE)
-        self.font.draw(self.screen,"PRESS R TO RACE AGAIN",205,445,3,COLOR_YELLOW)
-        self.font.draw(self.screen,"ENTER MENU",305,490,3,COLOR_WHITE)
+        self.font.draw(self.screen,f"POSITION {self._current_position()}/{RIVAL_COUNT+1}",250,230,3,COLOR_WHITE)
+        self.font.draw(self.screen,"FINAL SCOREBOARD",240,275,3,COLOR_CYAN)
+        board = self.finish_order or sorted([("YOU", self.player.progress, self.score)] + [(r.name, r.progress, 0) for r in self.rivals], key=lambda item:item[1], reverse=True)
+        for rank, entry in enumerate(board[:RIVAL_COUNT+1], start=1):
+            name, progress, points = entry
+            row_y = 310 + (rank-1)*25
+            row_color = COLOR_YELLOW if name == "YOU" else COLOR_WHITE
+            self.font.draw(self.screen,f"{rank}. {name}",185,row_y,2,row_color)
+            self.font.draw(self.screen,f"{int(progress):4d}M",390,row_y,2,COLOR_WHITE)
+            self.font.draw(self.screen,f"{points} PTS",520,row_y,2,COLOR_CYAN)
+        self.font.draw(self.screen,"PRESS R TO RACE AGAIN",205,475,2,COLOR_YELLOW)
+        self.font.draw(self.screen,"ENTER MENU",305,510,2,COLOR_WHITE)
 
     def draw(self):
         if self.state=="MENU":
