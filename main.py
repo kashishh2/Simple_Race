@@ -249,8 +249,9 @@ class Game:
             scale=max(0.12,min(1.30,scale))
             rival.draw(self.screen,x,y,scale,False)
 
-        player_curve = self.world.curve_at(self.player.progress+20)
-        player_center=SCREEN_WIDTH/2+self.player.lane*250-player_curve*62
+        # The road's foreground is the player's reference frame; lateral drift
+        # moves the vehicle across it instead of visually auto-centering the sprite.
+        player_center=SCREEN_WIDTH/2+self.player.lane*250
         self.player.draw_player(self.screen,player_center)
         remaining=max(0,FINISH_LINE_DISTANCE-self.player.progress)
         self.hud.draw(self.screen,self.time_left,self.player.speed,self.score,
