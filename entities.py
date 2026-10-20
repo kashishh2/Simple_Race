@@ -153,9 +153,11 @@ class Player(Car):
         # Direct lateral control: steering is responsive, while the road's camber
         # and bends naturally pull the bike sideways unless the rider corrects it.
         speed_ratio = self.speed / max(1.0, PLAYER_MAX_SPEED)
-        steer_effectiveness = max(0.72, 1.0 - speed_ratio * 0.28)
-        steer_rate = 3.0 * steer_effectiveness
-        curve_drift = curve * speed_ratio * 0.78
+        steer_effectiveness = max(0.82, 1.0 - speed_ratio * 0.18)
+        steer_rate = 3.5 * steer_effectiveness
+        # A bend now creates a strong lateral force at racing speed. With no
+        # counter-steering, the bike visibly washes toward the outside of the turn.
+        curve_drift = curve * speed_ratio * 1.7
         lateral_rate = steer * steer_rate - curve_drift
         self.lane = clamp(self.lane + lateral_rate * dt, -MAX_LANE, MAX_LANE)
         self.hit_timer = max(0.0, self.hit_timer - dt)
