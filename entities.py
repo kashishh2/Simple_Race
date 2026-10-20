@@ -131,35 +131,55 @@ class Player(Car):
         pygame.draw.circle(surface,(38,28,24),(center_x-28,top+4),8)
         pygame.draw.circle(surface,(255,220,40),(center_x+28,top+4),8)
     def _draw_bike_player(self, surface, center_x):
-        if self.steering_direction < 0:
-            choices = ("bikes/player_bike_lean_left.png", "bikes/player_bike_upright.png")
-        elif self.steering_direction > 0:
-            choices = ("bikes/player_bike_lean_right.png", "bikes/player_bike_upright.png")
-        else:
-            choices = ("bikes/player_bike_upright.png", "bikes/player_bike_lean_left.png",
-                       "bikes/player_bike_lean_right.png")
-        sprite, _ = assets.first(choices)
-        if sprite is None:
-            # Also try common exported sprite names; these are individual images, not sheets.
-            sprite, _ = assets.first(("bikes/player.png", "riders/player_bike.png",
-                                      "player_bike_upright.png"))
+        # The three legacy "upright/lean" PNG paths currently contain the same
+        # 3x2 contact sheet. Crop one frame instead of blitting the full sheet.
+        direction = -1 if self.steering_direction < 0 else 1 if self.steering_direction > 0 else 0
+        cache_key = "_bike_frames_cached"
+        frames = getattr(self, cache_key, None)
+        if frames is None:
+            sheet, _ = assets.first(("bikes/player_bike_upright.png",
+                                     "bikes/player_bike_lean_left.png",
+                                     "bikes/player_bike_lean_right.png",
+                                     "source_sheets/player_bike_sprite_sheet.png"))
+            frames = {}
+            if sheet is not None:
+                sw, sh = sheet.get_size()
+                # The committed artwork is a 3-column x 2-row contact sheet.
+                cell_w, cell_h = sw // 3, sh // 2
+                for key, col, row in (("left", 0, 0), ("upright", 1, 0), ("right", 2, 0)):
+                    rect = pygame.Rect(col*cell_w, row*cell_h, cell_w, cell_h)
+                    frame = sheet.subsurface(rect).copy().convert_alpha()
+                    # Remove the light gray checkerboard around the sprite.
+                    # Only neutral, bright pixels are keyed; colored bike/rider pixels remain.
+                    for py in range(frame.get_height()):
+                        for px in range(frame.get_width()):
+                            r, g, b, a = frame.get_at((px, py))
+                            if min(r, g, b) >= 155 and max(r, g, b)-min(r, g, b) <= 18:
+                                frame.set_at((px, py), (r, g, b, 0))
+                    frames[key] = frame
+            setattr(self, cache_key, frames)
+
+        frame_key = "left" if direction < 0 else "right" if direction > 0 else "upright"
+        sprite = frames.get(frame_key) or frames.get("upright")
         if sprite is not None:
             iw, ih = sprite.get_size()
-            max_w, max_h = 150, 190
-            factor = min(max_w/max(1,iw), max_h/max(1,ih))
-            sprite = pygame.transform.smoothscale(sprite, (max(1,int(iw*factor)), max(1,int(ih*factor))))
-            surface.blit(sprite, (int(center_x-sprite.get_width()/2), SCREEN_HEIGHT-10-sprite.get_height()))
+            factor = min(100/max(1, iw), 142/max(1, ih))
+            sprite = pygame.transform.smoothscale(
+                sprite, (max(1, int(iw*factor)), max(1, int(ih*factor))))
+            surface.blit(sprite, (int(center_x-sprite.get_width()/2),
+                                  SCREEN_HEIGHT-10-sprite.get_height()))
             return
-        # Clearly marked fallback: motorcycle silhouette, never the legacy car.
+
+        # Fallback: a compact motorcycle silhouette, never a car.
         cx, bottom = int(center_x), SCREEN_HEIGHT-12
-        pygame.draw.ellipse(surface, (18,20,24), (cx-27,bottom-22,54,18))
-        pygame.draw.circle(surface,(12,12,16),(cx,bottom-26),14,5)
-        pygame.draw.line(surface,(210,20,32),(cx,bottom-37),(cx,bottom-91),10)
-        pygame.draw.polygon(surface,(235,35,35),[(cx-11,bottom-70),(cx+11,bottom-70),(cx+21,bottom-43),(cx-21,bottom-43)])
-        pygame.draw.circle(surface,(25,25,30),(cx,bottom-101),10)
-        pygame.draw.line(surface,(235,35,35),(cx-18,bottom-87),(cx+18,bottom-87),6)
+        pygame.draw.ellipse(surface, (18,20,24), (cx-20,bottom-16,40,13))
+        pygame.draw.circle(surface,(12,12,16),(cx,bottom-20),10,4)
+        pygame.draw.line(surface,(210,20,32),(cx,bottom-30),(cx,bottom-72),7)
+        pygame.draw.polygon(surface,(235,35,35),[(cx-8,bottom-55),(cx+8,bottom-55),(cx+15,bottom-34),(cx-15,bottom-34)])
+        pygame.draw.circle(surface,(25,25,30),(cx,bottom-80),8)
+        pygame.draw.line(surface,(235,35,35),(cx-14,bottom-69),(cx+14,bottom-69),5)
         if not getattr(self, "_bike_warned", False):
-            print("[render] Bike art not found. Using motorcycle silhouette fallback.")
+            print("[render] Bike art unavailable; using motorcycle silhouette.")
             self._bike_warned = True
 
     def draw_player(self, surface, center_x):
