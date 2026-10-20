@@ -157,8 +157,8 @@ class Player(Car):
         target_lane = clamp(self.lane + (steer * PLAYER_STEER * steer_effectiveness - curve_drift) * dt,
                             -MAX_LANE, MAX_LANE)
         # Smooth lane motion with a capped response speed to prevent teleport-like jumps.
-        response = min(1.0, dt * 3.2)
-        max_step = 0.95 * dt
+        response = min(1.0, dt * 8.0)
+        max_step = 2.8 * dt
         lane_delta = clamp((target_lane-self.lane)*response, -max_step, max_step)
         self.lane = clamp(self.lane + lane_delta, -MAX_LANE, MAX_LANE)
         self.hit_timer = max(0.0, self.hit_timer - dt)
