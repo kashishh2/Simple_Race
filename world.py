@@ -70,7 +70,13 @@ class World:
         start = self.distance_traveled
         end = min(FINISH_LINE_DISTANCE, start + max(0.0, depth))
         bend = self._curve_integral(start, end) * 0.24
-        return SCREEN_WIDTH/2 - bend * (1.0 - min(1.0, depth/MAX_VISIBLE_DEPTH)*0.35)
+        depth_ratio = min(1.0, max(0.0, depth)/MAX_VISIBLE_DEPTH)
+        # Let the near road surface sweep sideways as well as the horizon.
+        # Keeping depth=0 pinned to screen center made the bike appear centered
+        # even while the distant road was visibly curving away.
+        local_curve = self.curve_at(start + 20.0)
+        near_sway = local_curve * 92.0 * (1.0 - depth_ratio)
+        return SCREEN_WIDTH/2 - bend * (1.0 - depth_ratio*0.35) - near_sway
 
     def project(self, depth):
         # depth=0 is foreground, larger depth approaches horizon.
