@@ -64,28 +64,45 @@ class World:
         width = ROAD_WIDTH_TOP + curve*(ROAD_WIDTH_BOTTOM-ROAD_WIDTH_TOP)
         return y, width, curve
 
+    def environment_at(self, distance=None):
+        distance = self.distance_traveled if distance is None else distance
+        if distance < 1000:
+            return "ALPINE"
+        if distance < 2050:
+            return "DESERT"
+        if distance < 3150:
+            return "FOREST"
+        return "COAST"
+
     def _draw_sky(self, surface):
-        # Only use a background image as the sky layer; the road and landscape
-        # are rendered afterward. Never render sprite sheets as backgrounds.
-        if assets.background(surface, ("backgrounds/mountain_background.jpg",
-                                       "backgrounds/mountain_background.png")):
+        environment = self.environment_at()
+        if environment == "ALPINE" and assets.background(
+                surface, ("backgrounds/mountain_background.jpg", "backgrounds/mountain_background.png")):
             return
+        palettes = {
+            "DESERT": ((40, 105, 190), (255, 190, 115), (195, 145, 70)),
+            "FOREST": ((25, 65, 120), (175, 205, 200), (45, 105, 90)),
+            "COAST": ((25, 135, 220), (175, 230, 245), (65, 155, 165)),
+        }
+        top, bottom, ridge = palettes.get(environment, (COLOR_SKY_TOP, COLOR_SKY_BOTTOM, (105,170,165)))
         for y in range(HORIZON_Y+1):
             t = y/max(1,HORIZON_Y)
-            c = tuple(int(a+(b-a)*t) for a,b in zip(COLOR_SKY_TOP,COLOR_SKY_BOTTOM))
-            pygame.draw.line(surface,c,(0,y),(SCREEN_WIDTH,y))
-        for cx,cy,rx,ry in [(90,105,42,11),(130,99,28,12),(535,138,50,12),(575,131,28,10)]:
-            pygame.draw.ellipse(surface,(230,242,240),(cx-rx,cy-ry,rx*2,ry*2))
-        # distant hills and city silhouette
-        pygame.draw.polygon(surface,(105,170,165),[(0,HORIZON_Y-2),(75,HORIZON_Y-38),(150,HORIZON_Y-4),(245,HORIZON_Y-50),(340,HORIZON_Y-3),(445,HORIZON_Y-32),(555,HORIZON_Y-2),(675,HORIZON_Y-40),(800,HORIZON_Y-3),(800,HORIZON_Y+15),(0,HORIZON_Y+15)])
-        x=0
-        while x<SCREEN_WIDTH:
-            bw=14+((x*7)%17); bh=12+((x*13)%38)
-            pygame.draw.rect(surface,(120,160,180),(x,HORIZON_Y-bh,bw,bh))
-            for wx in range(x+3,x+bw-2,7):
-                for wy in range(HORIZON_Y-bh+4,HORIZON_Y-2,9):
-                    pygame.draw.rect(surface,(205,225,225),(wx,wy,2,3))
-            x+=bw+2
+            color = tuple(int(a+(b-a)*t) for a,b in zip(top,bottom))
+            pygame.draw.line(surface,color,(0,y),(SCREEN_WIDTH,y))
+        if environment == "DESERT":
+            pygame.draw.circle(surface,(255,222,145),(SCREEN_WIDTH-105,75),30)
+            pygame.draw.polygon(surface,(190,135,75),[(0,HORIZON_Y-2),(100,120),(220,185),(360,110),(500,185),(650,130),(800,170),(800,HORIZON_Y+10),(0,HORIZON_Y+10)])
+            pygame.draw.polygon(surface,(220,170,95),[(0,HORIZON_Y),(160,155),(285,HORIZON_Y),(520,145),(690,HORIZON_Y),(800,160),(800,HORIZON_Y+12),(0,HORIZON_Y+12)])
+        elif environment == "FOREST":
+            pygame.draw.polygon(surface,ridge,[(0,HORIZON_Y),(70,130),(140,HORIZON_Y-8),(240,105),(335,HORIZON_Y),(455,125),(555,HORIZON_Y),(670,110),(800,HORIZON_Y)])
+            for x in range(0,SCREEN_WIDTH,38):
+                height=22+(x*17%48)
+                pygame.draw.polygon(surface,(24,75,48),[(x,HORIZON_Y),(x+18,HORIZON_Y-height),(x+36,HORIZON_Y)])
+        elif environment == "COAST":
+            pygame.draw.rect(surface,(65,165,195),(0,HORIZON_Y-22,SCREEN_WIDTH,25))
+            pygame.draw.polygon(surface,(110,175,155),[(0,HORIZON_Y),(95,150),(190,HORIZON_Y),(360,135),(500,HORIZON_Y),(650,145),(800,HORIZON_Y)])
+        else:
+            pygame.draw.polygon(surface,ridge,[(0,HORIZON_Y-2),(75,HORIZON_Y-38),(150,HORIZON_Y-4),(245,HORIZON_Y-50),(340,HORIZON_Y-3),(445,HORIZON_Y-32),(555,HORIZON_Y-2),(675,HORIZON_Y-40),(800,HORIZON_Y-3),(800,HORIZON_Y+15),(0,HORIZON_Y+15)])
 
     def _draw_scenery(self, surface, obj):
         rel = obj["distance"] - self.distance_traveled
@@ -173,11 +190,16 @@ class World:
 
     def draw(self,surface,player_speed):
         self._draw_sky(surface)
-        pygame.draw.rect(surface,COLOR_GRASS,(0,HORIZON_Y,SCREEN_WIDTH,SCREEN_HEIGHT-HORIZON_Y))
+        environment = self.environment_at()
+        ground = {"ALPINE": COLOR_GRASS, "DESERT": (174,132,64), "FOREST": (25,92,42), "COAST": (65,155,115)}[environment]
+        ground_alt = {"ALPINE": COLOR_GRASS_ALT, "DESERT": (195,151,76), "FOREST": (35,112,52), "COAST": (80,170,125)}[environment]
+        road_base = {"ALPINE": COLOR_ROAD, "DESERT": (82,68,58), "FOREST": (47,53,53), "COAST": (62,66,72)}[environment]
+        road_alt = {"ALPINE": COLOR_ROAD_ALT, "DESERT": (91,76,64), "FOREST": (55,61,60), "COAST": (72,76,82)}[environment]
+        pygame.draw.rect(surface,ground,(0,HORIZON_Y,SCREEN_WIDTH,SCREEN_HEIGHT-HORIZON_Y))
         # Moving grass stripes imply speed.
         stripe=int(self.distance_traveled*0.8)%54
         for y in range(HORIZON_Y+stripe-54,SCREEN_HEIGHT,108):
-            pygame.draw.rect(surface,COLOR_GRASS_ALT,(0,max(HORIZON_Y,y),SCREEN_WIDTH,54))
+            pygame.draw.rect(surface,ground_alt,(0,max(HORIZON_Y,y),SCREEN_WIDTH,54))
 
         # Road strips from horizon to foreground; each strip bends according to course ahead.
         for i in range(ROAD_SEGMENTS):
@@ -191,7 +213,7 @@ class World:
             center0=self.road_center_at_depth(d0)
             center1=self.road_center_at_depth(d1)
             phase=(i+int(self.distance_traveled/16))%2
-            road_color=COLOR_ROAD if phase==0 else COLOR_ROAD_ALT
+            road_color=road_base if phase==0 else road_alt
             sh0,sh1=w0*0.075,w1*0.075
             pygame.draw.polygon(surface,COLOR_SHOULDER,[(center0-w0/2-sh0,y0),(center0-w0/2,y0),(center1-w1/2,y1),(center1-w1/2-sh1,y1)])
             pygame.draw.polygon(surface,COLOR_SHOULDER,[(center0+w0/2,y0),(center0+w0/2+sh0,y0),(center1+w1/2+sh1,y1),(center1+w1/2,y1)])
@@ -208,7 +230,8 @@ class World:
 
         for obj in sorted(self.scenery,key=lambda item:item["distance"],reverse=True):
             self._draw_scenery(surface,obj)
-        self._draw_start_finish(surface,0,True)
+        if self.distance_traveled < 100:
+            self._draw_start_finish(surface,90,True)
         self._draw_start_finish(surface,FINISH_LINE_DISTANCE,False)
 
     def draw_minimap(self,surface,rivals,player_progress):
