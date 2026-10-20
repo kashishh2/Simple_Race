@@ -197,8 +197,10 @@ class World:
         road_alt = {"ALPINE": COLOR_ROAD_ALT, "DESERT": (91,76,64), "FOREST": (55,61,60), "COAST": (72,76,82)}[environment]
         pygame.draw.rect(surface,ground,(0,HORIZON_Y,SCREEN_WIDTH,SCREEN_HEIGHT-HORIZON_Y))
         # Moving grass stripes imply speed.
-        stripe=int(self.distance_traveled*0.8)%54
-        for y in range(HORIZON_Y+stripe-54,SCREEN_HEIGHT,108):
+        speed_ratio = max(0.0, min(1.35, player_speed / max(1.0, PLAYER_MAX_SPEED)))
+        # Roadside bands and lane dash phases move faster at higher speeds.
+        stripe=int(self.distance_traveled*(0.8 + speed_ratio*2.8))%108
+        for y in range(HORIZON_Y+stripe-108,SCREEN_HEIGHT,108):
             pygame.draw.rect(surface,ground_alt,(0,max(HORIZON_Y,y),SCREEN_WIDTH,54))
 
         # Road strips from horizon to foreground; each strip bends according to course ahead.
@@ -212,7 +214,7 @@ class World:
             d0=(1-t0)*MAX_VISIBLE_DEPTH; d1=(1-t1)*MAX_VISIBLE_DEPTH
             center0=self.road_center_at_depth(d0)
             center1=self.road_center_at_depth(d1)
-            phase=(i+int(self.distance_traveled/16))%2
+            phase=(i+int(self.distance_traveled*(0.9 + speed_ratio*2.5)/16))%2
             road_color=road_base if phase==0 else road_alt
             sh0,sh1=w0*0.075,w1*0.075
             pygame.draw.polygon(surface,COLOR_SHOULDER,[(center0-w0/2-sh0,y0),(center0-w0/2,y0),(center1-w1/2,y1),(center1-w1/2-sh1,y1)])
