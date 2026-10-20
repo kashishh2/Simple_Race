@@ -31,6 +31,7 @@ class Game:
         self.countdown=3.0
         self.collision_cooldown=0.0
         self.message=""
+        self.message_timer=0.0
         self.finish_order=[]
         self._reset_grid()
 
@@ -120,15 +121,25 @@ class Game:
         self.elapsed+=dt
         self.time_left=max(0.0,LEVEL_TIME_LIMIT-self.elapsed)
         self.collision_cooldown=max(0.0,self.collision_cooldown-dt)
+        self.message_timer=max(0.0,self.message_timer-dt)
 
         for rival in self.rivals:
             rival_curve=self.world.curve_at(rival.progress+90)
-            old_progress=rival.progress
+            old_rival_progress=rival.progress
+            old_gap=old_rival_progress-(self.player.progress-speed_factor*dt)
             rival.update_ai(self.player.progress,self.player.lane,self.player.speed,rival_curve,dt,FINISH_LINE_DISTANCE)
-            # Award points when the player passes a rival, not when the rival passes the player.
-            if old_progress > self.player.progress and rival.progress <= self.player.progress:
+            new_gap=rival.progress-self.player.progress
+
+            # Award points exactly when the player passes a rival (ahead -> behind).
+            if old_gap > 0 and new_gap <= 0:
                 self.score += OVERTAKE_POINTS
-            # Collision when cars are side-by-side in both lane and progress.
+                self.message = "OVERTAKE +250"
+                self.message_timer = 1.15
+            # A clean pass at high relative speed earns a small bonus.
+            if old_gap > 0 and new_gap <= 0 and self.player.speed > rival.speed + 25:
+                self.score += 100
+
+            # Position is derived from actual progress; contact costs speed and points.
             if abs(rival.progress-self.player.progress)<9 and abs(rival.lane-self.player.lane)<0.23 and self.collision_cooldown<=0:
                 self.player.speed*=0.58
                 self.player.hit_timer=0.8
@@ -137,6 +148,7 @@ class Game:
                 rival.progress=max(0,rival.progress-18)
                 self.collision_cooldown=COLLISION_COOLDOWN
                 self.message="CRASH!"
+                self.message_timer=0.9
                 self.score=max(0,self.score-100)
 
         if self.world.finish_line_reached:
@@ -183,8 +195,8 @@ class Game:
             shade.fill((0,0,0,65)); self.screen.blit(shade,(0,0))
             label="GO!" if self.countdown<0.8 else str(max(1,int(self.countdown)+1))
             self.font.draw(self.screen,label,SCREEN_WIDTH//2-35,SCREEN_HEIGHT//2-45,8,COLOR_YELLOW)
-        if self.message and self.collision_cooldown>0:
-            self.font.draw(self.screen,self.message,SCREEN_WIDTH//2-60,150,4,COLOR_RED)
+        if self.message and self.message_timer>0:
+            self.font.draw(self.screen,self.message,SCREEN_WIDTH//2-85,150,3,COLOR_YELLOW if "OVERTAKE" in self.message else COLOR_RED)
 
     def _draw_menu(self):
         self.screen.fill((40,105,195))
