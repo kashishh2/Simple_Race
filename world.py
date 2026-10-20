@@ -199,7 +199,7 @@ class World:
         # Moving grass stripes imply speed.
         speed_ratio = max(0.0, min(1.35, player_speed / max(1.0, PLAYER_MAX_SPEED)))
         # Roadside bands and lane dash phases move faster at higher speeds.
-        stripe=int(self.distance_traveled*(speed_ratio*3.0))%108
+        stripe=int(self.distance_traveled*0.45)%108
         for y in range(HORIZON_Y+stripe-108,SCREEN_HEIGHT,108):
             pygame.draw.rect(surface,ground_alt,(0,max(HORIZON_Y,y),SCREEN_WIDTH,54))
 
@@ -214,7 +214,7 @@ class World:
             d0=(1-t0)*MAX_VISIBLE_DEPTH; d1=(1-t1)*MAX_VISIBLE_DEPTH
             center0=self.road_center_at_depth(d0)
             center1=self.road_center_at_depth(d1)
-            phase=(i+int(self.distance_traveled*(speed_ratio*2.6)/16))%2
+            phase=(i+int(self.distance_traveled/18.0))%2
             road_color=road_base if phase==0 else road_alt
             sh0,sh1=w0*0.075,w1*0.075
             pygame.draw.polygon(surface,COLOR_SHOULDER,[(center0-w0/2-sh0,y0),(center0-w0/2,y0),(center1-w1/2,y1),(center1-w1/2-sh1,y1)])
@@ -223,7 +223,7 @@ class World:
             # Classic arcade red/cream rumble strips make curves and speed more legible.
             if phase == 0:
                 curb0,curb1=max(2,w0*0.035),max(3,w1*0.035)
-                curb_color=(205,38,38) if (i+int(self.distance_traveled*speed_ratio/22))%4 < 2 else (245,235,210)
+                curb_color=(205,38,38) if (i+int(self.distance_traveled/22.0))%4 < 2 else (245,235,210)
                 pygame.draw.polygon(surface,curb_color,[
                     (center0-w0/2-sh0,y0),(center0-w0/2,y0),
                     (center1-w1/2,y1),(center1-w1/2-sh1,y1)])
