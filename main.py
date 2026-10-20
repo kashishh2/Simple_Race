@@ -37,8 +37,8 @@ class Game:
 
     def _reset_grid(self):
         # Staggered grid: opponents occupy multiple rows and lanes, not a single line ahead.
-        offsets=[-18, 0, 22, 43, 64, 86, 108]
-        lanes=[-0.55, 0.15, 0.58, -0.12, -0.62, 0.42, 0.0]
+        offsets=[-18, 0, 22, 43]
+        lanes=[-0.55, 0.15, 0.58, -0.12]
         for i,r in enumerate(self.rivals):
             r.set_grid_position(0.0,offsets[i],lanes[i])
         self.player.progress=0.0
