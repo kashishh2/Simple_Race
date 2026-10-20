@@ -247,34 +247,47 @@ class World:
         self._draw_start_finish(surface,FINISH_LINE_DISTANCE,False)
 
     def draw_minimap(self,surface,rivals,player_progress):
-        # Fixed mini-map panel; show course curves from current point to finish.
+        # Full-course map: every rider is plotted against actual race progress.
         x0,y0,w,h=SCREEN_WIDTH-154,66,136,170
-        pygame.draw.rect(surface,(12,18,30),(x0,y0,w,h))
-        pygame.draw.rect(surface,(235,235,220),(x0,y0,w,h),2)
-        # Course route in normalized mini-map coordinates.
+        panel=pygame.Rect(x0,y0,w,h)
+        pygame.draw.rect(surface,(9,15,28),panel,border_radius=3)
+        pygame.draw.rect(surface,(235,235,220),panel,2,border_radius=3)
+
         points=[]
-        sample_count=70
+        sample_count=90
         for i in range(sample_count+1):
-            dist=player_progress+(FINISH_LINE_DISTANCE-player_progress)*i/sample_count
-            curve=self.curve_at(dist)
-            px=x0+w/2
-            # Cumulative curvature approximation gives the route an obvious winding shape.
+            dist=FINISH_LINE_DISTANCE*i/sample_count
             offset=0.0
-            for start,end,c in self.curve_profile:
-                if start<dist:
-                    offset += c*max(0,min(dist,end)-start)
-            py=y0+8+i*(h-16)/sample_count
+            for seg_start,seg_end,curve in self.curve_profile:
+                if seg_start < dist:
+                    offset += curve*max(0.0,min(dist,seg_end)-seg_start)
             px=x0+w/2+max(-42,min(42,offset*0.055))
+            py=y0+8+i*(h-16)/sample_count
             points.append((int(px),int(py)))
         if len(points)>1:
-            pygame.draw.lines(surface,(255,220,45),False,points,4)
-        # Player marker at top/current progress; rival markers by progress.
-        pygame.draw.circle(surface,(50,240,235),(int(points[0][0]),int(points[0][1])),5)
-        for rival in rivals:
-            ratio=max(0,min(1,(rival.progress-player_progress)/max(1,FINISH_LINE_DISTANCE-player_progress)))
+            pygame.draw.lines(surface,(75,82,100),False,points,7)
+            pygame.draw.lines(surface,(255,215,45),False,points,3)
+
+        def marker(progress):
+            ratio=max(0.0,min(1.0,progress/max(1.0,FINISH_LINE_DISTANCE)))
             idx=min(sample_count,int(ratio*sample_count))
-            pygame.draw.circle(surface,rival.color,points[idx],3)
-        # Current curve indicator
+            return points[idx]
+
+        # Start and finish anchors.
+        pygame.draw.circle(surface,(245,245,235),marker(0),3)
+        pygame.draw.circle(surface,(245,70,55),marker(FINISH_LINE_DISTANCE),4)
+
+        # Rivals have stable, contrasting colors; the player is cyan.
+        for rival in rivals:
+            pos=marker(rival.progress)
+            pygame.draw.circle(surface,(5,8,15),pos,5)
+            pygame.draw.circle(surface,rival.color,pos,4)
+            pygame.draw.circle(surface,(245,245,235),pos,4,1)
+        player_pos=marker(player_progress)
+        pygame.draw.circle(surface,(5,8,15),player_pos,6)
+        pygame.draw.circle(surface,(45,245,235),player_pos,5)
+        pygame.draw.circle(surface,(255,255,255),player_pos,5,1)
+
         curve=self.curve_at(player_progress+160)
         label="LEFT" if curve < -0.18 else "RIGHT" if curve > 0.18 else "STRAIGHT"
         font=pygame.font.Font(None,18)
