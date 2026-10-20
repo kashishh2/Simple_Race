@@ -233,15 +233,15 @@ class Game:
         title="YOU WIN!" if self.state=="FINISHED" else "RACE OVER"
         self.font.draw(self.screen,title,270,175,6,COLOR_YELLOW)
         self.font.draw(self.screen,f"POSITION {self._current_position()}/{RIVAL_COUNT+1}",250,230,3,COLOR_WHITE)
-        self.font.draw(self.screen,"FINAL SCOREBOARD",240,275,3,COLOR_CYAN)
+        self.font.draw(self.screen,"FINAL SCOREBOARD",240,270,3,COLOR_CYAN)
+        self.font.draw(self.screen,f"YOUR SCORE {self.score}",285,295,2,COLOR_YELLOW)
         board = self.finish_order or sorted([("YOU", self.player.progress, self.score)] + [(r.name, r.progress, 0) for r in self.rivals], key=lambda item:item[1], reverse=True)
         for rank, entry in enumerate(board[:RIVAL_COUNT+1], start=1):
             name, progress, points = entry
-            row_y = 310 + (rank-1)*25
+            row_y = 325 + (rank-1)*23
             row_color = COLOR_YELLOW if name == "YOU" else COLOR_WHITE
             self.font.draw(self.screen,f"{rank}. {name}",185,row_y,2,row_color)
-            self.font.draw(self.screen,f"{int(progress):4d}M",390,row_y,2,COLOR_WHITE)
-            self.font.draw(self.screen,f"{points} PTS",520,row_y,2,COLOR_CYAN)
+            self.font.draw(self.screen,f"{int(progress):4d}M",445,row_y,2,COLOR_CYAN)
         self.font.draw(self.screen,"PRESS R TO RACE AGAIN",205,475,2,COLOR_YELLOW)
         self.font.draw(self.screen,"ENTER MENU",305,510,2,COLOR_WHITE)
 
