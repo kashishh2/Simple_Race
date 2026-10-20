@@ -241,7 +241,8 @@ class Rival(Car):
         self.base_height = random.randint(44,54)
         self.skill = random.uniform(0.88,1.12)
         self.aggression = random.uniform(0.35,0.95)
-        self.change_timer = random.uniform(0.8,2.5)
+        self.change_timer = random.uniform(1.8,3.2)
+        self.target_speed = random.uniform(174, 205) * self.skill
         self.stamina = 100.0
         self.stunned = 0.0
         self.finished = False
@@ -260,21 +261,31 @@ class Rival(Car):
         self.change_timer -= dt
 
         # Bots accelerate hard from the grid, then target a skill-dependent pace.
-        target_speed = random.uniform(176, 222) * self.skill
-        if self.progress > player_progress + 250:
-            target_speed *= 0.96
+        # Stable opponent pace creates readable battles instead of frame-to-frame
+        # random speed changes. Small rubber-band adjustments keep the pack competitive.
+        target_speed = self.target_speed
+        gap = self.progress - player_progress
+        if gap < -140:
+            target_speed += 9.0
+        elif gap > 220:
+            target_speed -= 7.0
         if self.stunned <= 0:
             if self.speed < target_speed:
-                self.speed = min(target_speed, self.speed + random.uniform(65,105)*dt)
+                self.speed = min(target_speed, self.speed + 48.0*dt)
             else:
-                self.speed = max(target_speed-12, self.speed-24*dt)
+                self.speed = max(target_speed-5.0, self.speed-13.0*dt)
 
         # Pick lanes periodically; react to nearby player and other riders.
         if self.change_timer <= 0:
-            self.ai_lane_target = random.choice([-0.72, -0.36, 0.0, 0.36, 0.72])
-            self.change_timer = random.uniform(0.7, 2.1) / self.skill
-        if abs(self.progress-player_progress) < 130 and abs(self.lane-player_lane) < 0.25:
-            self.ai_lane_target = clamp(player_lane + random.choice([-0.42,0.42]), -0.78, 0.78)
+            # Choose a lane for several seconds; only make deliberate overtaking moves.
+            options = [-0.72, -0.36, 0.0, 0.36, 0.72]
+            if abs(gap) < 95 and abs(self.lane-player_lane) < 0.42:
+                options = [v for v in options if abs(v-player_lane) > 0.34] or options
+            self.ai_lane_target = min(options, key=lambda lane: abs(lane-self.lane) + random.random()*0.22)
+            self.change_timer = random.uniform(2.0, 3.6) / self.skill
+        if 12 < gap < 115 and abs(self.lane-player_lane) < 0.24:
+            # If blocked behind the player, signal and move to a passing lane.
+            self.ai_lane_target = clamp(player_lane + (0.42 if self.lane <= player_lane else -0.42), -0.78, 0.78)
         # Riders drift outward in turns and actively counter-steer.
         self.lane += (self.ai_lane_target-self.lane)*min(1.0, dt*2.6)
         self.lane = clamp(self.lane - curve*0.06*dt, -0.86, 0.86)
