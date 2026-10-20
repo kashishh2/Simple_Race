@@ -16,8 +16,10 @@ class Game:
         self.running=True
         self.state="MENU"  # MENU, GRID, COUNTDOWN, RACING, FINISHED, GAMEOVER
         self.selected=0
+        self.vehicle_type="BIKE"
         self.world=World()
         self.player=Player()
+        self.player.vehicle_type=self.vehicle_type
         self.rivals=[Rival(i) for i in range(RIVAL_COUNT)]
         self.hud=HUD()
         self.font=PixelFont()
@@ -41,6 +43,7 @@ class Game:
     def reset(self):
         self.world.reset()
         self.player=Player()
+        self.player.vehicle_type=self.vehicle_type
         self.rivals=[Rival(i) for i in range(RIVAL_COUNT)]
         self.score=0
         self.elapsed=0.0
@@ -63,13 +66,23 @@ class Game:
                         self.running=False
                 elif self.state=="MENU":
                     if event.key in (pygame.K_UP,pygame.K_w):
-                        self.selected=(self.selected-1)%3
+                        if self.selected == 1:
+                            self.vehicle_type = "CAR" if self.vehicle_type == "BIKE" else "BIKE"
+                        else:
+                            self.selected=(self.selected-1)%4
                     elif event.key in (pygame.K_DOWN,pygame.K_s):
-                        self.selected=(self.selected+1)%3
+                        if self.selected == 1:
+                            self.vehicle_type = "CAR" if self.vehicle_type == "BIKE" else "BIKE"
+                        else:
+                            self.selected=(self.selected+1)%4
+                    elif event.key in (pygame.K_LEFT, pygame.K_RIGHT) and self.selected == 1:
+                        self.vehicle_type = "CAR" if self.vehicle_type == "BIKE" else "BIKE"
                     elif event.key==pygame.K_RETURN:
                         if self.selected==0:
                             self.reset()
                         elif self.selected==1:
+                            self.vehicle_type = "CAR" if self.vehicle_type == "BIKE" else "BIKE"
+                        elif self.selected==2:
                             self.state="CONTROLS"
                         else:
                             self.running=False
@@ -178,18 +191,20 @@ class Game:
         pygame.draw.polygon(self.screen,COLOR_ROAD,[(370,HORIZON_Y),(430,HORIZON_Y),(690,600),(110,600)])
         self.font.draw(self.screen,"HIGHWAY RUSH",205,60,6,COLOR_YELLOW)
         self.font.draw(self.screen,"ROAD RACING",275,115,3,COLOR_WHITE)
-        for i,label in enumerate(("START RACE","CONTROLS","QUIT")):
-            y=245+i*55
+        menu_items = ("START RACE", f"VEHICLE: {self.vehicle_type}", "CONTROLS", "QUIT")
+        for i,label in enumerate(menu_items):
+            y=225+i*48
             if i==self.selected:
-                pygame.draw.rect(self.screen,(18,30,55),(220,y-8,360,42))
-                pygame.draw.rect(self.screen,COLOR_CYAN,(220,y-8,360,42),2)
-                self.font.draw(self.screen,">",242,y,4,COLOR_YELLOW)
-            self.font.draw(self.screen,label,280,y,4,COLOR_WHITE)
+                pygame.draw.rect(self.screen,(18,30,55),(190,y-7,420,38))
+                pygame.draw.rect(self.screen,COLOR_CYAN,(190,y-7,420,38),2)
+                self.font.draw(self.screen,">",208,y,3,COLOR_YELLOW)
+            self.font.draw(self.screen,label,245,y,3,COLOR_WHITE)
+        self.font.draw(self.screen,"LEFT/RIGHT CHANGE VEHICLE",220,440,2,COLOR_WHITE)
 
     def _draw_controls(self):
         self.screen.fill((25,45,80))
         self.font.draw(self.screen,"CONTROLS",275,90,5,COLOR_YELLOW)
-        lines=["UP W ACCELERATE","DOWN S BRAKE","LEFT RIGHT STEER","SPACE NITRO BOOST","ENTER BACK"]
+        lines=["UP W ACCELERATE","DOWN S BRAKE","LEFT RIGHT STEER","SPACE NITRO BOOST","MENU LEFT/RIGHT VEHICLE","ENTER BACK"]
         for i,line in enumerate(lines):
             self.font.draw(self.screen,line,220,205+i*48,3,COLOR_WHITE)
 

@@ -1,58 +1,77 @@
-import os
+"""Cached project-relative asset loading with explicit sprite-sheet cropping."""
+from pathlib import Path
 import pygame
-import logging
+
+ROOT = Path(__file__).resolve().parent.parent
+ASSET_ROOT = ROOT / "assets"
 
 class AssetManager:
-    """Manages loading and caching of game assets."""
-    def __init__(self, root_dir=None):
-        self.root_dir = root_dir or os.path.dirname(os.path.abspath(__file__))
-        self.images = {}
-        self.fonts = {}
-        self.logger = logging.getLogger("AssetManager")
+    def __init__(self):
+        self.cache = {}
+        self.warned = set()
 
-    def get_image(self, relative_path, scale=None):
-        """Loads and caches a PNG image. Supports scaling."""
-        if relative_path in self.images:
-            img = self.images[relative_path]
-            if scale:
-                scale_key = (relative_path, scale)
-                if scale_key in self.images:
-                    return self.images[scale_key]
-                img = self._scale_image(img, scale)
-                self.images[scale_key] = img
-            return img
+    def find_path(self, relative):
+        rel = Path(relative)
+        candidates = [ASSET_ROOT / rel, ROOT / rel]
+        if not rel.is_absolute() and ASSET_ROOT.exists():
+            candidates.extend(ASSET_ROOT.rglob(rel.name))
+        for p in candidates:
+            if p.is_file():
+                return p
+        return None
 
-        full_path = os.path.join(self.root_dir, relative_path)
+    def image(self, relative, size=None):
+        key = (str(relative), tuple(size) if size else None)
+        if key in self.cache:
+            return self.cache[key]
+        path = self.find_path(relative)
+        if path is None:
+            if key not in self.warned:
+                print(f"[assets] Missing: {relative}")
+                self.warned.add(key)
+            return None
         try:
-            img = pygame.image.load(full_path).convert_alpha()
-            self.images[relative_path] = img
-            
-            if scale:
-                scale_key = (relative_path, scale)
-                self.images[scale_key] = self._scale_image(img, scale)
-            
-            return img
-        except pygame.error as e:
-            self.logger.error(f"Failed to load image: {full_path} - {e}")
-            # Return a placeholder surface (magenta square) to avoid crashing
-            placeholder = pygame.Surface((64, 64), pygame.SRCALPHA)
-            pygame.draw.rect(placeholder, (255, 0, 255), (0, 0, 64, 64), 2)
-            return placeholder
-        except FileNotFoundError:
-            self.logger.error(f"Image not found: {full_path}")
-            placeholder = pygame.Surface((64, 64), pygame.SRCALPHA)
-            pygame.draw.rect(placeholder, (255, 0, 255), (0, 0, 64, 64), 2)
-            return placeholder
+            image = pygame.image.load(str(path)).convert_alpha()
+            if size:
+                image = pygame.transform.smoothscale(image, (max(1,int(size[0])), max(1,int(size[1]))))
+            self.cache[key] = image
+            return image
+        except (pygame.error, OSError) as exc:
+            print(f"[assets] Failed to load {path}: {exc}")
+            return None
 
-    def _scale_image(self, img, scale):
-        """Internal helper for scaling."""
-        new_size = (int(img.get_width() * scale), int(img.get_height() * scale))
-        return pygame.transform.smoothscale(img, new_size)
+    def first(self, candidates):
+        for candidate in candidates:
+            img = self.image(candidate)
+            if img is not None:
+                return img, candidate
+        return None, None
 
-    def clear_cache(self):
-        """Clears the image cache."""
-        self.images.clear()
-        self.fonts.clear()
+    def crop_sheet(self, relative, rect, size=None):
+        """Crop one sprite using (x, y, width, height); never blit the whole sheet."""
+        sheet = self.image(relative)
+        if sheet is None:
+            return None
+        x, y, w, h = map(int, rect)
+        bounds = pygame.Rect(0, 0, *sheet.get_size())
+        crop = pygame.Rect(x, y, w, h).clip(bounds)
+        if crop.width <= 0 or crop.height <= 0:
+            print(f"[assets] Invalid crop {rect} for {relative} ({sheet.get_size()})")
+            return None
+        sprite = sheet.subsurface(crop).copy()
+        if size:
+            sprite = pygame.transform.smoothscale(sprite, (max(1,int(size[0])), max(1,int(size[1]))))
+        return sprite
 
-# Global instance for easy access across modules
+    def background(self, surface, candidates):
+        image, _ = self.first(candidates)
+        if image is None:
+            return False
+        sw, sh = surface.get_size()
+        iw, ih = image.get_size()
+        scale = max(sw / iw, sh / ih)
+        image = pygame.transform.smoothscale(image, (int(iw*scale), int(ih*scale)))
+        surface.blit(image, ((sw-image.get_width())//2, (sh-image.get_height())//2))
+        return True
+
 assets = AssetManager()

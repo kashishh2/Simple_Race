@@ -65,6 +65,11 @@ class World:
         return y, width, curve
 
     def _draw_sky(self, surface):
+        # Only use a background image as the sky layer; the road and landscape
+        # are rendered afterward. Never render sprite sheets as backgrounds.
+        if assets.background(surface, ("backgrounds/mountain_background.jpg",
+                                       "backgrounds/mountain_background.png")):
+            return
         for y in range(HORIZON_Y+1):
             t = y/max(1,HORIZON_Y)
             c = tuple(int(a+(b-a)*t) for a,b in zip(COLOR_SKY_TOP,COLOR_SKY_BOTTOM))

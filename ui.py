@@ -42,6 +42,8 @@ class PixelFont:
 
 class HUD:
     def __init__(self):
+        if not pygame.font.get_init():
+            pygame.font.init()
         self.font=PixelFont()
         self.pygame_font=pygame.font.Font(None,22)
 

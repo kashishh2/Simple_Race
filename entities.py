@@ -2,6 +2,7 @@
 import random
 import pygame
 from config import *
+from game.assets import assets
 
 
 def clamp(value, low, high):
@@ -65,6 +66,8 @@ class Player(Car):
         self.hit_timer = 0.0
         self.nitro = 100.0
         self.nitro_active = False
+        self.steering_direction = 0
+        self.vehicle_type = "BIKE"
 
     def update(self, keys, dt, curve=0.0):
         accelerating = keys[pygame.K_UP] or keys[pygame.K_w]
@@ -86,13 +89,22 @@ class Player(Car):
 
         self.speed = clamp(self.speed, 0.0, PLAYER_MAX_SPEED + (45 if self.nitro_active else 0))
         steer = int(keys[pygame.K_RIGHT] or keys[pygame.K_d]) - int(keys[pygame.K_LEFT] or keys[pygame.K_a])
+        self.steering_direction = steer
         # The course pulls the rider outward through a bend; steering counters it.
         curve_drift = curve * (self.speed / max(1.0, PLAYER_MAX_SPEED)) * 0.20
         self.lane = clamp(self.lane + (steer * PLAYER_STEER - curve_drift) * dt,
                           -MAX_LANE, MAX_LANE)
         self.hit_timer = max(0.0, self.hit_timer - dt)
 
-    def draw_player(self, surface, center_x):
+    def _draw_car_player(self, surface, center_x):
+        sprite, _ = assets.first(("cars/player_car.png", "cars/player_car_rear.png",
+                                  "traffic/player_car.png"))
+        if sprite is not None:
+            iw, ih = sprite.get_size()
+            factor = min(250/max(1,iw), 180/max(1,ih))
+            sprite = pygame.transform.smoothscale(sprite, (max(1,int(iw*factor)), max(1,int(ih*factor))))
+            surface.blit(sprite, (int(center_x-sprite.get_width()/2), SCREEN_HEIGHT-10-sprite.get_height()))
+            return
         bottom = SCREEN_HEIGHT - 14
         w, h = 250, 126
         left, top = int(center_x - w/2), bottom-h
@@ -118,6 +130,44 @@ class Player(Car):
         pygame.draw.line(surface,(255,100,85),(left+28,top+43),(left+w-28,top+43),3)
         pygame.draw.circle(surface,(38,28,24),(center_x-28,top+4),8)
         pygame.draw.circle(surface,(255,220,40),(center_x+28,top+4),8)
+    def _draw_bike_player(self, surface, center_x):
+        if self.steering_direction < 0:
+            choices = ("bikes/player_bike_lean_left.png", "bikes/player_bike_upright.png")
+        elif self.steering_direction > 0:
+            choices = ("bikes/player_bike_lean_right.png", "bikes/player_bike_upright.png")
+        else:
+            choices = ("bikes/player_bike_upright.png", "bikes/player_bike_lean_left.png",
+                       "bikes/player_bike_lean_right.png")
+        sprite, _ = assets.first(choices)
+        if sprite is None:
+            # Also try common exported sprite names; these are individual images, not sheets.
+            sprite, _ = assets.first(("bikes/player.png", "riders/player_bike.png",
+                                      "player_bike_upright.png"))
+        if sprite is not None:
+            iw, ih = sprite.get_size()
+            max_w, max_h = 150, 190
+            factor = min(max_w/max(1,iw), max_h/max(1,ih))
+            sprite = pygame.transform.smoothscale(sprite, (max(1,int(iw*factor)), max(1,int(ih*factor))))
+            surface.blit(sprite, (int(center_x-sprite.get_width()/2), SCREEN_HEIGHT-10-sprite.get_height()))
+            return
+        # Clearly marked fallback: motorcycle silhouette, never the legacy car.
+        cx, bottom = int(center_x), SCREEN_HEIGHT-12
+        pygame.draw.ellipse(surface, (18,20,24), (cx-27,bottom-22,54,18))
+        pygame.draw.circle(surface,(12,12,16),(cx,bottom-26),14,5)
+        pygame.draw.line(surface,(210,20,32),(cx,bottom-37),(cx,bottom-91),10)
+        pygame.draw.polygon(surface,(235,35,35),[(cx-11,bottom-70),(cx+11,bottom-70),(cx+21,bottom-43),(cx-21,bottom-43)])
+        pygame.draw.circle(surface,(25,25,30),(cx,bottom-101),10)
+        pygame.draw.line(surface,(235,35,35),(cx-18,bottom-87),(cx+18,bottom-87),6)
+        if not getattr(self, "_bike_warned", False):
+            print("[render] Bike art not found. Using motorcycle silhouette fallback.")
+            self._bike_warned = True
+
+    def draw_player(self, surface, center_x):
+        if self.vehicle_type == "CAR":
+            self._draw_car_player(surface, center_x)
+        else:
+            self._draw_bike_player(surface, center_x)
+
 
 
 class Rival(Car):
