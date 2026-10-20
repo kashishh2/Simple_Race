@@ -23,35 +23,74 @@ class Car:
     def draw(self, surface, x, y, scale, is_player=False):
         if scale <= 0:
             return
+        x, y = int(x), int(y)
+        vehicle_type = getattr(self, "vehicle_type", "CAR")
+        if vehicle_type == "BIKE":
+            # Draw one cropped bike frame for AI riders too; never use car geometry
+            # in a motorcycle race.
+            frames = getattr(self, "_bike_frames_cached", None)
+            if frames is None:
+                frames = {}
+                sheet, _ = assets.first(("bikes/player_bike_upright.png",
+                                         "source_sheets/player_bike_sprite_sheet.png"))
+                if sheet is not None:
+                    sw, sh = sheet.get_size()
+                    cw, ch = sw // 3, sh // 2
+                    for key, col in (("left", 0), ("upright", 1), ("right", 2)):
+                        frame = sheet.subsurface(pygame.Rect(col*cw, 0, cw, ch)).copy().convert_alpha()
+                        # Remove neutral light-grey checkerboard pixels around the art.
+                        for py in range(frame.get_height()):
+                            for px in range(frame.get_width()):
+                                r, g, b, a = frame.get_at((px, py))
+                                if min(r, g, b) >= 155 and max(r, g, b)-min(r, g, b) <= 18:
+                                    frame.set_at((px, py), (r, g, b, 0))
+                        frames[key] = frame
+                self._bike_frames_cached = frames
+            direction = -1 if self.lane < self.ai_lane_target-0.06 else 1 if self.lane > self.ai_lane_target+0.06 else 0
+            sprite = frames.get("left" if direction < 0 else "right" if direction > 0 else "upright")
+            if sprite is not None:
+                iw, ih = sprite.get_size()
+                max_w, max_h = max(7, int(54*scale)), max(9, int(76*scale))
+                factor = min(max_w/max(1,iw), max_h/max(1,ih))
+                sprite = pygame.transform.smoothscale(sprite, (max(1,int(iw*factor)), max(1,int(ih*factor))))
+                surface.blit(sprite, (x-sprite.get_width()//2, y-sprite.get_height()))
+                return
+            # Compact motorcycle silhouette fallback.
+            h, w = max(10,int(54*scale)), max(5,int(25*scale))
+            pygame.draw.ellipse(surface, (12,12,16), (x-w//2,y-h//5,w,h//4))
+            pygame.draw.line(surface, (210,25,35), (x,y-h//4), (x,y-h*4//5), max(2,int(4*scale)))
+            pygame.draw.circle(surface, (20,20,24), (x,y-h//5), max(2,int(5*scale)), max(1,int(2*scale)))
+            pygame.draw.circle(surface, (30,30,35), (x,y-h*4//5), max(2,int(4*scale)))
+            return
+
         w = max(8, int(self.base_width * scale))
         h = max(7, int(self.base_height * scale))
-        x, y = int(x), int(y)
         left, top = x - w // 2, y - h
-
+        # Use an actual car sprite when available, scaled for pseudo-3D depth.
+        sprite, _ = assets.first(("cars/player_car.png", "cars/player_car_blue.png",
+                                  "cars/player_car_yellow.png"))
+        if sprite is not None:
+            target = (max(8, int(70*scale)), max(7, int(52*scale)))
+            sprite = pygame.transform.smoothscale(sprite, target)
+            surface.blit(sprite, (x-sprite.get_width()//2, y-sprite.get_height()))
+            return
         wheel_w, wheel_h = max(2, w // 8), max(2, h // 3)
         pygame.draw.rect(surface, COLOR_BLACK, (left + w // 10, y - wheel_h, wheel_w, wheel_h))
         pygame.draw.rect(surface, COLOR_BLACK, (left + w - w // 10 - wheel_w, y - wheel_h, wheel_w, wheel_h))
-
-        # Rear body silhouette with angular fenders.
-        pygame.draw.polygon(surface, (25, 22, 27), [
-            (left + w//8, top + h//4), (left + w//4, top),
-            (left + w*3//4, top), (left + w*7//8, top + h//4),
-            (left + w, y - h//7), (left, y - h//7)
-        ])
-        pygame.draw.polygon(surface, self.color, [
-            (left + w//8, top + h//4), (left + w//4, top + h//12),
-            (left + w*3//4, top + h//12), (left + w*7//8, top + h//4),
-            (left + w*15//16, y - h//7), (left + w//16, y - h//7)
-        ])
-
+        pygame.draw.polygon(surface, (25,22,27), [
+            (left+w//8,top+h//4),(left+w//4,top),(left+w*3//4,top),
+            (left+w*7//8,top+h//4),(left+w,y-h//7),(left,y-h//7)])
+        pygame.draw.polygon(surface,self.color,[
+            (left+w//8,top+h//4),(left+w//4,top+h//12),(left+w*3//4,top+h//12),
+            (left+w*7//8,top+h//4),(left+w*15//16,y-h//7),(left+w//16,y-h//7)])
         if scale > 0.24:
-            win = pygame.Rect(left + w//4, top + h//9, max(3, w//2), max(2, h//4))
-            pygame.draw.rect(surface, (20, 38, 58), win)
-            pygame.draw.rect(surface, (95, 185, 220), win.inflate(-max(1,w//12), -max(1,h//12)))
-            light_w, light_h = max(2,w//7), max(2,h//8)
-            pygame.draw.rect(surface, (255,35,30), (left+w//12, y-h//3, light_w, light_h))
-            pygame.draw.rect(surface, (255,35,30), (left+w-w//12-light_w, y-h//3, light_w, light_h))
-            pygame.draw.rect(surface, (28,25,28), (left+w//8, y-max(2,h//8), w*3//4, max(2,h//8)))
+            win=pygame.Rect(left+w//4,top+h//9,max(3,w//2),max(2,h//4))
+            pygame.draw.rect(surface,(20,38,58),win)
+            pygame.draw.rect(surface,(95,185,220),win.inflate(-max(1,w//12),-max(1,h//12)))
+            light_w,light_h=max(2,w//7),max(2,h//8)
+            pygame.draw.rect(surface,(255,35,30),(left+w//12,y-h//3,light_w,light_h))
+            pygame.draw.rect(surface,(255,35,30),(left+w-w//12-light_w,y-h//3,light_w,light_h))
+
 
 
 class Player(Car):
@@ -196,6 +235,7 @@ class Rival(Car):
     def __init__(self, index):
         super().__init__(random.choice(self.COLORS))
         self.index = index
+        self.vehicle_type = "CAR"
         self.name = f"RIDER {index+1}"
         self.base_width = random.randint(66,82)
         self.base_height = random.randint(44,54)
