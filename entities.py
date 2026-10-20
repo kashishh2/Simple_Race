@@ -157,39 +157,32 @@ class Player(Car):
         self.hit_timer = max(0.0, self.hit_timer - dt)
 
     def _draw_car_player(self, surface, center_x):
-        sprite, _ = assets.first(("cars/player_car.png", "cars/player_car_rear.png",
-                                  "traffic/player_car.png"))
-        if sprite is not None:
-            iw, ih = sprite.get_size()
-            factor = min(250/max(1,iw), 180/max(1,ih))
-            sprite = pygame.transform.smoothscale(sprite, (max(1,int(iw*factor)), max(1,int(ih*factor))))
-            surface.blit(sprite, (int(center_x-sprite.get_width()/2), SCREEN_HEIGHT-10-sprite.get_height()))
-            return
+        # Low, wide rear-view coupe with a short cabin, not a tall van profile.
         bottom = SCREEN_HEIGHT - 14
-        w, h = 250, 126
+        w, h = 232, 94
         left, top = int(center_x - w/2), bottom-h
-        pygame.draw.ellipse(surface, (25,35,30), (left+12,bottom-17,w-24,23))
-        # Tires
-        pygame.draw.polygon(surface, (18,18,22), [(left+14,top+72),(left+48,top+70),(left+47,bottom-5),(left+18,bottom-5)])
-        pygame.draw.polygon(surface, (18,18,22), [(left+w-48,top+70),(left+w-14,top+72),(left+w-18,bottom-5),(left+w-47,bottom-5)])
-        body = (255,45,42) if self.hit_timer > 0 and int(self.hit_timer*16)%2 else (215,15,25)
-        pygame.draw.polygon(surface, (70,8,15), [(left+12,top+48),(left+45,top+18),(left+w-45,top+18),(left+w-12,top+48),(left+w-2,bottom-20),(left+2,bottom-20)])
-        pygame.draw.polygon(surface, body, [(left+24,top+44),(left+58,top+24),(left+w-58,top+24),(left+w-24,top+44),(left+w-18,bottom-30),(left+18,bottom-30)])
-        # Cabin and back glass
-        pygame.draw.polygon(surface, (105,10,18), [(left+67,top+24),(left+82,top+1),(left+w-82,top+1),(left+w-67,top+24)])
-        pygame.draw.polygon(surface, (20,40,58), [(left+81,top+8),(left+91,top+5),(left+w-91,top+5),(left+w-81,top+8),(left+w-72,top+31),(left+72,top+31)])
-        pygame.draw.line(surface, (125,205,225), (left+91,top+11),(left+w-91,top+11),3)
-        # Rear light bar, tail lamps, plate, bumper
-        pygame.draw.rect(surface,(255,28,30),(left+24,top+51,49,17))
-        pygame.draw.rect(surface,(255,28,30),(left+w-73,top+51,49,17))
-        pygame.draw.rect(surface,(255,170,150),(left+30,top+55,35,4))
-        pygame.draw.rect(surface,(255,170,150),(left+w-65,top+55,35,4))
-        pygame.draw.rect(surface,(28,25,29),(left+15,bottom-31,w-30,13))
-        pygame.draw.rect(surface,(235,232,215),(center_x-31,bottom-54,62,19))
-        pygame.draw.rect(surface,(30,30,34),(center_x-25,bottom-50,50,11))
-        pygame.draw.line(surface,(255,100,85),(left+28,top+43),(left+w-28,top+43),3)
-        pygame.draw.circle(surface,(38,28,24),(center_x-28,top+4),8)
-        pygame.draw.circle(surface,(255,220,40),(center_x+28,top+4),8)
+        pygame.draw.ellipse(surface, (25,35,30), (left+12,bottom-13,w-24,20))
+        # Wide rear tires and wheel arches.
+        pygame.draw.polygon(surface, (10,11,15), [(left+12,top+54),(left+42,top+49),(left+45,bottom-4),(left+17,bottom-4)])
+        pygame.draw.polygon(surface, (10,11,15), [(left+w-42,top+49),(left+w-12,top+54),(left+w-17,bottom-4),(left+w-45,bottom-4)])
+        body = (255,55,48) if self.hit_timer > 0 and int(self.hit_timer*16)%2 else (205,12,24)
+        pygame.draw.polygon(surface,(65,7,14),[(left+9,top+39),(left+38,top+21),(left+71,top+11),(left+w-71,top+11),(left+w-38,top+21),(left+w-9,top+39),(left+w-2,bottom-18),(left+2,bottom-18)])
+        pygame.draw.polygon(surface,body,[(left+18,top+40),(left+43,top+24),(left+75,top+15),(left+w-75,top+15),(left+w-43,top+24),(left+w-18,top+40),(left+w-15,bottom-25),(left+15,bottom-25)])
+        # Broad sloping rear glass; roof is low and narrow.
+        glass=[(left+77,top+16),(left+w-77,top+16),(left+w-57,top+37),(left+57,top+37)]
+        pygame.draw.polygon(surface,(13,35,49),glass)
+        pygame.draw.line(surface,(115,190,210),glass[0],glass[3],2)
+        pygame.draw.line(surface,(115,190,210),glass[1],glass[2],2)
+        pygame.draw.line(surface,(75,7,14),(left+31,top+43),(left+w-31,top+43),3)
+        pygame.draw.rect(surface,(255,42,35),(left+20,top+48,40,10))
+        pygame.draw.rect(surface,(255,42,35),(left+w-60,top+48,40,10))
+        pygame.draw.rect(surface,(255,175,155),(left+25,top+51,27,3))
+        pygame.draw.rect(surface,(255,175,155),(left+w-52,top+51,27,3))
+        pygame.draw.rect(surface,(28,27,31),(left+13,bottom-25,w-26,10))
+        pygame.draw.rect(surface,(235,232,215),(int(center_x-25),bottom-39,50,12))
+        pygame.draw.rect(surface,(35,35,38),(int(center_x-20),bottom-36,40,6))
+        pygame.draw.line(surface,(245,95,85),(left+25,top+41),(left+w-25,top+41),2)
+
     def _draw_bike_player(self, surface, center_x):
         # The three legacy "upright/lean" PNG paths currently contain the same
         # 3x2 contact sheet. Crop one frame instead of blitting the full sheet.
@@ -283,35 +276,35 @@ class Rival(Car):
         self.stunned = max(0.0, self.stunned-dt)
         self.change_timer -= dt
 
-        # Bots build speed gradually from the grid, then target a skill-dependent pace.
-        # Stable opponent pace creates readable battles instead of frame-to-frame
-        # random speed changes. Small rubber-band adjustments keep the pack competitive.
-        target_speed = self.target_speed
+        # Each rival follows its own pace, acceleration and lane decisions.
+        # A small, bounded catch-up adjustment keeps races close without mirroring
+        # the player's speed or position.
         gap = self.progress - player_progress
-        if gap < -180:
-            target_speed += 14.0
-        elif gap > 260:
-            target_speed -= 10.0
+        target_speed = self.target_speed
+        if gap < -420:
+            target_speed += 7.0
+        elif gap > 520:
+            target_speed -= 5.0
+        target_speed = clamp(target_speed, 125.0, 222.0)
         if self.stunned <= 0:
-            if self.speed < target_speed:
-                self.speed = min(target_speed, self.speed + 22.0*dt)
-            else:
-                self.speed = max(target_speed-5.0, self.speed-9.0*dt)
+            acceleration = 19.0 if self.speed < target_speed else 0.0
+            deceleration = 6.5 if self.speed > target_speed else 0.0
+            self.speed += (acceleration - deceleration) * dt
+            self.speed = min(target_speed, self.speed)
 
-        # Pick lanes periodically; react to nearby player and other riders.
+        # Independent lane choices are made on a longer cadence. React only when
+        # an actual nearby collision risk exists, rather than tracking the player.
         if self.change_timer <= 0:
-            # Choose a lane for several seconds; only make deliberate overtaking moves.
-            options = [-0.72, -0.36, 0.0, 0.36, 0.72]
-            if abs(gap) < 95 and abs(self.lane-player_lane) < 0.42:
-                options = [v for v in options if abs(v-player_lane) > 0.34] or options
-            self.ai_lane_target = min(options, key=lambda lane: abs(lane-self.lane) + random.random()*0.22)
-            self.change_timer = random.uniform(2.0, 3.6) / self.skill
-        if 12 < gap < 115 and abs(self.lane-player_lane) < 0.24:
-            # If blocked behind the player, signal and move to a passing lane.
-            self.ai_lane_target = clamp(player_lane + (0.42 if self.lane <= player_lane else -0.42), -0.78, 0.78)
-        # Riders drift outward in turns and actively counter-steer.
-        self.lane += (self.ai_lane_target-self.lane)*min(1.0, dt*2.6)
-        self.lane = clamp(self.lane - curve*0.06*dt, -0.86, 0.86)
+            options = [-0.78, -0.39, 0.0, 0.39, 0.78]
+            self.ai_lane_target = random.choice(options)
+            self.change_timer = random.uniform(1.8, 4.2) / max(0.85, self.skill)
+        if abs(gap) < 28 and abs(self.lane-player_lane) < 0.20:
+            passing_lane = self.lane + random.choice([-0.48, 0.48])
+            self.ai_lane_target = clamp(passing_lane, -0.82, 0.82)
+
+        lane_response = min(1.0, dt * random.uniform(1.5, 2.2))
+        self.lane += (self.ai_lane_target-self.lane) * lane_response
+        self.lane = clamp(self.lane - curve*0.045*dt, -0.86, 0.86)
         self.progress += self.speed / 3.6 * dt
         if self.progress >= race_distance:
             self.progress = race_distance
