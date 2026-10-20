@@ -50,10 +50,22 @@ class Car:
             sprite = frames.get("left" if direction < 0 else "right" if direction > 0 else "upright")
             if sprite is not None:
                 iw, ih = sprite.get_size()
-                max_w, max_h = max(7, int(54*scale)), max(9, int(76*scale))
+                max_w, max_h = max(7, int(100*scale)), max(9, int(142*scale))
                 factor = min(max_w/max(1,iw), max_h/max(1,ih))
                 sprite = pygame.transform.smoothscale(sprite, (max(1,int(iw*factor)), max(1,int(ih*factor))))
+                # Per-rider tint makes otherwise identical bike sprites identifiable.
+                tint = getattr(self, "rider_color", self.color)
+                tinted = sprite.copy()
+                tint_layer = pygame.Surface(tinted.get_size(), pygame.SRCALPHA)
+                tint_layer.fill((*tint, 255))
+                tinted.blit(tint_layer, (0,0), special_flags=pygame.BLEND_RGBA_MULT)
+                sprite = tinted
+                # Bright number plate/marker remains readable even at small scale.
                 surface.blit(sprite, (x-sprite.get_width()//2, y-sprite.get_height()))
+                if scale > 0.35:
+                    marker_y = y-sprite.get_height()-7
+                    pygame.draw.circle(surface, tint, (x, marker_y), max(3,int(5*scale)))
+                    pygame.draw.circle(surface, (245,245,235), (x, marker_y), max(3,int(5*scale)), 1)
                 return
             # Compact motorcycle silhouette fallback.
             h, w = max(10,int(54*scale)), max(5,int(25*scale))
@@ -237,6 +249,8 @@ class Rival(Car):
         self.index = index
         self.vehicle_type = "CAR"
         self.name = f"RIDER {index+1}"
+        self.rider_color = self.COLORS[index % len(self.COLORS)]
+        self.color = self.rider_color
         self.base_width = random.randint(66,82)
         self.base_height = random.randint(44,54)
         self.skill = random.uniform(0.88,1.12)
