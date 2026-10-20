@@ -242,7 +242,7 @@ class Rival(Car):
         self.skill = random.uniform(0.88,1.12)
         self.aggression = random.uniform(0.35,0.95)
         self.change_timer = random.uniform(1.8,3.2)
-        self.target_speed = random.uniform(174, 205) * self.skill
+        self.target_speed = random.uniform(188, 228) * self.skill
         self.stamina = 100.0
         self.stunned = 0.0
         self.finished = False
@@ -265,10 +265,10 @@ class Rival(Car):
         # random speed changes. Small rubber-band adjustments keep the pack competitive.
         target_speed = self.target_speed
         gap = self.progress - player_progress
-        if gap < -140:
-            target_speed += 9.0
-        elif gap > 220:
-            target_speed -= 7.0
+        if gap < -180:
+            target_speed += 14.0
+        elif gap > 260:
+            target_speed -= 10.0
         if self.stunned <= 0:
             if self.speed < target_speed:
                 self.speed = min(target_speed, self.speed + 48.0*dt)
