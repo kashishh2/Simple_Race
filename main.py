@@ -32,6 +32,8 @@ class Game:
         self.collision_cooldown=0.0
         self.message=""
         self.message_timer=0.0
+        self.curve_crash_timer=0.0
+        self.curve_warning_timer=0.0
         self.finish_order=[]
         self._reset_grid()
 
@@ -55,6 +57,10 @@ class Game:
         self.time_left=LEVEL_TIME_LIMIT
         self.countdown=3.0
         self.collision_cooldown=0.0
+        self.curve_crash_timer=0.0
+        self.curve_warning_timer=0.0
+        self.message=""
+        self.message_timer=0.0
         self.finish_order=[]
         self._reset_grid()
         self.state="COUNTDOWN"
@@ -113,8 +119,34 @@ class Game:
             return
 
         curve=self.world.curve_at(self.player.progress+90)
+        upcoming_curve=self.world.curve_at(self.player.progress+190)
         keys=pygame.key.get_pressed()
         self.player.update(keys,dt,curve)
+
+        # Warn before severe corners and enforce a safe cornering speed.
+        warning_curve = upcoming_curve if abs(upcoming_curve) > abs(curve) else curve
+        safe_corner_speed = 220.0 - min(1.0, abs(warning_curve)) * 105.0
+        approaching_bend = abs(upcoming_curve) >= 0.45
+        if approaching_bend and self.player.speed > safe_corner_speed - 18:
+            self.curve_warning_timer = 1.0
+            if self.message_timer <= 0.2:
+                self.message = "CURVE AHEAD - SLOW DOWN!"
+                self.message_timer = 0.7
+        else:
+            self.curve_warning_timer = max(0.0, self.curve_warning_timer-dt)
+
+        if abs(curve) >= 0.45 and self.player.speed > safe_corner_speed:
+            self.curve_crash_timer += dt * (1.0 + (self.player.speed-safe_corner_speed)/35.0)
+            if self.curve_crash_timer >= 1.15:
+                self.player.damage = min(100, self.player.damage+35)
+                self.player.speed *= 0.42
+                self.player.hit_timer = 1.0
+                self.curve_crash_timer = 0.0
+                self.message = "CORNER CRASH! BRAKE BEFORE BENDS!"
+                self.message_timer = 1.6
+        else:
+            self.curve_crash_timer = max(0.0, self.curve_crash_timer-dt*1.8)
+
         speed_factor=self.player.speed/3.6
         self.player.progress += speed_factor*dt
         self.world.distance_traveled=self.player.progress
@@ -174,15 +206,15 @@ class Game:
                 d=min(rel, MAX_VISIBLE_DEPTH)
                 y, road_w, curve=self.world.project(d)
                 center=self.world.road_center_at_depth(d)
-                scale=0.12 + (1.0 - d/MAX_VISIBLE_DEPTH)**1.25 * 0.90
+                scale=0.12 + (1.0 - d/MAX_VISIBLE_DEPTH)**1.15 * 1.18
             else:
                 behind=min(abs(rel), 300.0)
                 y=min(SCREEN_HEIGHT-82, SCREEN_HEIGHT-145 + behind*0.34)
                 road_w=ROAD_WIDTH_BOTTOM
                 center=SCREEN_WIDTH/2
-                scale=0.82 + (behind/300.0)*0.20
+                scale=0.92 + (behind/300.0)*0.22
             x=center+rival.lane*road_w*0.43
-            scale=max(0.14,min(1.12,scale))
+            scale=max(0.12,min(1.30,scale))
             rival.draw(self.screen,x,y,scale,False)
 
         player_center=SCREEN_WIDTH/2+self.player.lane*205
@@ -198,7 +230,12 @@ class Game:
             label="GO!" if self.countdown<0.8 else str(max(1,int(self.countdown)+1))
             self.font.draw(self.screen,label,SCREEN_WIDTH//2-35,SCREEN_HEIGHT//2-45,8,COLOR_YELLOW)
         if self.message and self.message_timer>0:
-            self.font.draw(self.screen,self.message,SCREEN_WIDTH//2-85,150,3,COLOR_YELLOW if "OVERTAKE" in self.message else COLOR_RED)
+            warning = "CURVE" in self.message or "BRAKE" in self.message or "CRASH" in self.message
+            if not warning or int(self.message_timer*12)%2 == 0:
+                msg_x = max(8, SCREEN_WIDTH//2-len(self.message)*6)
+                self.font.draw(self.screen,self.message,msg_x,150,2,COLOR_YELLOW if warning else COLOR_CYAN)
+            if self.curve_warning_timer > 0 and int(self.curve_warning_timer*14)%2 == 0:
+                pygame.draw.rect(self.screen,COLOR_RED,(8,100,SCREEN_WIDTH-16,4),2)
 
     def _draw_menu(self):
         self.screen.fill((40,105,195))
