@@ -150,17 +150,14 @@ class Player(Car):
         self.speed = clamp(self.speed, 0.0, PLAYER_MAX_SPEED + (45 if self.nitro_active else 0))
         steer = int(keys[pygame.K_RIGHT] or keys[pygame.K_d]) - int(keys[pygame.K_LEFT] or keys[pygame.K_a])
         self.steering_direction = steer
-        # The course pulls the rider outward through a bend; steering counters it.
+        # Direct lateral control: steering is responsive, while the road's camber
+        # and bends naturally pull the bike sideways unless the rider corrects it.
         speed_ratio = self.speed / max(1.0, PLAYER_MAX_SPEED)
-        steer_effectiveness = max(0.42, 1.0 - speed_ratio * 0.52)
-        curve_drift = curve * speed_ratio * 0.28
-        target_lane = clamp(self.lane + (steer * PLAYER_STEER * steer_effectiveness - curve_drift) * dt,
-                            -MAX_LANE, MAX_LANE)
-        # Smooth lane motion with a capped response speed to prevent teleport-like jumps.
-        response = min(1.0, dt * 8.0)
-        max_step = 2.8 * dt
-        lane_delta = clamp((target_lane-self.lane)*response, -max_step, max_step)
-        self.lane = clamp(self.lane + lane_delta, -MAX_LANE, MAX_LANE)
+        steer_effectiveness = max(0.72, 1.0 - speed_ratio * 0.28)
+        steer_rate = 3.0 * steer_effectiveness
+        curve_drift = curve * speed_ratio * 0.78
+        lateral_rate = steer * steer_rate - curve_drift
+        self.lane = clamp(self.lane + lateral_rate * dt, -MAX_LANE, MAX_LANE)
         self.hit_timer = max(0.0, self.hit_timer - dt)
 
     def _draw_car_player(self, surface, center_x):
