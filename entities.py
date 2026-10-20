@@ -151,8 +151,10 @@ class Player(Car):
         steer = int(keys[pygame.K_RIGHT] or keys[pygame.K_d]) - int(keys[pygame.K_LEFT] or keys[pygame.K_a])
         self.steering_direction = steer
         # The course pulls the rider outward through a bend; steering counters it.
-        curve_drift = curve * (self.speed / max(1.0, PLAYER_MAX_SPEED)) * 0.20
-        self.lane = clamp(self.lane + (steer * PLAYER_STEER - curve_drift) * dt,
+        speed_ratio = self.speed / max(1.0, PLAYER_MAX_SPEED)
+        steer_effectiveness = max(0.42, 1.0 - speed_ratio * 0.52)
+        curve_drift = curve * speed_ratio * 0.28
+        self.lane = clamp(self.lane + (steer * PLAYER_STEER * steer_effectiveness - curve_drift) * dt,
                           -MAX_LANE, MAX_LANE)
         self.hit_timer = max(0.0, self.hit_timer - dt)
 
