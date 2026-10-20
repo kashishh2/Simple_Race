@@ -87,38 +87,64 @@ class World:
                     pygame.draw.rect(surface,(205,225,225),(wx,wy,2,3))
             x+=bw+2
 
-    def _draw_scenery(self,surface,obj):
-        rel=(obj["distance"]-self.distance_traveled)
-        if rel<0:
+    def _draw_scenery(self, surface, obj):
+        rel = obj["distance"] - self.distance_traveled
+        if rel < 0:
             rel += FINISH_LINE_DISTANCE
-        if rel>MAX_VISIBLE_DEPTH:
+        if rel > MAX_VISIBLE_DEPTH:
             return
-        y,w,curve=self.project(rel)
-        center=self.road_center_at_depth(rel)
-        scale=0.12+curve*1.0
-        x=int(center+obj["side"]*(w/2+obj["offset"]*185*scale))
-        y=int(y); kind=obj["kind"]; color=obj["color"]
-        if y<HORIZON_Y-8 or y>SCREEN_HEIGHT+20 or x<-80 or x>SCREEN_WIDTH+80:
+        y, road_width, curve = self.project(rel)
+        center = self.road_center_at_depth(rel)
+        scale = 0.12 + curve
+        x = int(center + obj["side"] * (road_width/2 + obj["offset"]*185*scale))
+        y = int(y)
+        kind = obj["kind"]
+        if y < HORIZON_Y-8 or y > SCREEN_HEIGHT+20 or x < -100 or x > SCREEN_WIDTH+100:
             return
-        if kind in ("tree","palm"):
-            trunk=max(4,int(30*scale)); r=max(4,int(23*scale))
+
+        # Individual transparent props only; do not blit the full scenery sheet.
+        candidates = {
+            "tree": ("scenery/tree_broadleaf_01.png", "scenery/tree_broadleaf_02.png",
+                     "scenery/tree_pine_01.png", "scenery/tree_pine_02.png"),
+            "palm": ("scenery/tree_pine_03.png", "scenery/tree_broadleaf_01.png"),
+            "bush": ("scenery/bush_02.png",),
+            "rock": ("scenery/rock_cluster_01.png", "scenery/bush_rock_01.png"),
+            "sign": ("scenery/road_sign_curve.png", "scenery/road_sign_chevron.png"),
+        }
+        sizes = {
+            "tree": (int(96*scale), int(132*scale)),
+            "palm": (int(88*scale), int(125*scale)),
+            "bush": (int(74*scale), int(52*scale)),
+            "rock": (int(76*scale), int(50*scale)),
+            "sign": (int(48*scale), int(66*scale)),
+        }
+        for path in candidates.get(kind, ()):
+            sprite = assets.image(path)
+            if sprite is not None:
+                tw, th = max(8, sizes[kind][0]), max(8, sizes[kind][1])
+                sprite = pygame.transform.smoothscale(sprite, (tw, th))
+                surface.blit(sprite, (x-tw//2, y-th))
+                return
+
+        # Safe fallback if an asset cannot be loaded.
+        color = obj["color"]
+        if kind in ("tree", "palm"):
+            trunk=max(4,int(30*scale)); radius=max(4,int(23*scale))
             pygame.draw.rect(surface,(105,65,35),(x-max(1,int(3*scale)),y-trunk,max(2,int(7*scale)),trunk))
-            if kind=="tree":
-                pygame.draw.circle(surface,color,(x,y-trunk-r//2),r)
-                pygame.draw.circle(surface,tuple(min(255,c+20) for c in color),(x-r//3,y-trunk-r//2),max(2,r//2))
-            else:
-                pygame.draw.line(surface,(105,75,35),(x,y-trunk),(x-r,y-trunk-r),max(1,int(3*scale)))
-                pygame.draw.line(surface,(105,75,35),(x,y-trunk),(x+r,y-trunk-r),max(1,int(3*scale)))
-                pygame.draw.line(surface,(30,135,45),(x,y-trunk),(x,y-trunk-int(r*1.5)),max(2,int(4*scale)))
+            pygame.draw.circle(surface,color,(x,y-trunk-radius//2),radius)
+            pygame.draw.circle(surface,tuple(min(255,v+20) for v in color),
+                               (x-radius//3,y-trunk-radius//2),max(2,radius//2))
         elif kind=="bush":
-            r=max(3,int(15*scale)); pygame.draw.circle(surface,color,(x,y-r//2),r)
+            radius=max(3,int(15*scale)); pygame.draw.circle(surface,color,(x,y-radius//2),radius)
         elif kind=="sign":
             ph=max(5,int(28*scale)); sw=max(6,int(27*scale)); sh=max(5,int(17*scale))
             pygame.draw.rect(surface,(90,65,40),(x-2,y-ph,max(2,int(4*scale)),ph))
             pygame.draw.rect(surface,(20,100,100),(x-sw//2,y-ph-sh,sw,sh))
             pygame.draw.rect(surface,COLOR_WHITE,(x-sw//2,y-ph-sh,sw,sh),1)
         elif kind=="rock":
-            r=max(3,int(14*scale)); pygame.draw.polygon(surface,(205,195,165),[(x-r,y),(x-r//2,y-r),(x+r//2,y-r),(x+r,y-r//3),(x+r//2,y)])
+            radius=max(3,int(14*scale))
+            pygame.draw.polygon(surface,(205,195,165),[(x-radius,y),(x-radius//2,y-radius),
+                (x+radius//2,y-radius),(x+radius,y-radius//3),(x+radius//2,y)])
         elif kind=="building":
             bw=max(5,int(27*scale)); bh=max(5,int(42*scale))
             pygame.draw.rect(surface,(115,150,170),(x-bw//2,y-bh,bw,bh))
