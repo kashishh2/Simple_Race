@@ -21,6 +21,8 @@ class Game:
         self.player=Player()
         self.player.vehicle_type=self.vehicle_type
         self.rivals=[Rival(i) for i in range(RIVAL_COUNT)]
+        for rival in self.rivals:
+            rival.vehicle_type = self.vehicle_type
         self.hud=HUD()
         self.font=PixelFont()
         self.score=0
@@ -45,6 +47,8 @@ class Game:
         self.player=Player()
         self.player.vehicle_type=self.vehicle_type
         self.rivals=[Rival(i) for i in range(RIVAL_COUNT)]
+        for rival in self.rivals:
+            rival.vehicle_type = self.vehicle_type
         self.score=0
         self.elapsed=0.0
         self.time_left=LEVEL_TIME_LIMIT
