@@ -154,8 +154,13 @@ class Player(Car):
         speed_ratio = self.speed / max(1.0, PLAYER_MAX_SPEED)
         steer_effectiveness = max(0.42, 1.0 - speed_ratio * 0.52)
         curve_drift = curve * speed_ratio * 0.28
-        self.lane = clamp(self.lane + (steer * PLAYER_STEER * steer_effectiveness - curve_drift) * dt,
-                          -MAX_LANE, MAX_LANE)
+        target_lane = clamp(self.lane + (steer * PLAYER_STEER * steer_effectiveness - curve_drift) * dt,
+                            -MAX_LANE, MAX_LANE)
+        # Smooth lane motion with a capped response speed to prevent teleport-like jumps.
+        response = min(1.0, dt * 3.2)
+        max_step = 0.95 * dt
+        lane_delta = clamp((target_lane-self.lane)*response, -max_step, max_step)
+        self.lane = clamp(self.lane + lane_delta, -MAX_LANE, MAX_LANE)
         self.hit_timer = max(0.0, self.hit_timer - dt)
 
     def _draw_car_player(self, surface, center_x):
@@ -308,7 +313,9 @@ class Rival(Car):
             self.ai_lane_target = clamp(passing_lane, -0.82, 0.82)
 
         lane_response = min(1.0, dt * random.uniform(1.5, 2.2))
-        self.lane += (self.ai_lane_target-self.lane) * lane_response
+        lane_delta = (self.ai_lane_target-self.lane) * lane_response
+        lane_delta = clamp(lane_delta, -0.62*dt, 0.62*dt)
+        self.lane += lane_delta
         self.lane = clamp(self.lane - curve*0.045*dt, -0.86, 0.86)
         self.progress += self.speed / 3.6 * dt
         if self.progress >= race_distance:
