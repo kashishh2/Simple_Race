@@ -154,15 +154,21 @@ class Game:
             rel=rival.progress-self.player.progress
             if rel < -15 or rel > MAX_VISIBLE_DEPTH:
                 continue
-            # Camera projection: nearby rivals are lower/larger; far rivals near horizon.
-            d=max(0.0,rel)
-            y,w,curve=self.world.project(d)
-            center=self.world.road_center_at_depth(d)
-            x=center+rival.lane*w*0.43
-            scale=0.17+curve*0.95
-            if rel<0:
-                y=min(SCREEN_HEIGHT-95,y+abs(rel)*0.3)
-                scale=max(0.16,scale-abs(rel)*0.003)
+            # Depth is relative to the player: rivals ahead shrink toward the
+            # horizon; rivals behind move down the screen and grow.
+            if rel >= 0:
+                d=min(rel, MAX_VISIBLE_DEPTH)
+                y, road_w, curve=self.world.project(d)
+                center=self.world.road_center_at_depth(d)
+                scale=0.15 + (1.0 - d/MAX_VISIBLE_DEPTH)**1.65 * 0.95
+            else:
+                behind=min(abs(rel), 300.0)
+                y=min(SCREEN_HEIGHT-82, SCREEN_HEIGHT-145 + behind*0.34)
+                road_w=ROAD_WIDTH_BOTTOM
+                center=SCREEN_WIDTH/2
+                scale=0.72 + (behind/300.0)*0.38
+            x=center+rival.lane*road_w*0.43
+            scale=max(0.14,min(1.12,scale))
             rival.draw(self.screen,x,y,scale,False)
 
         player_center=SCREEN_WIDTH/2+self.player.lane*205
