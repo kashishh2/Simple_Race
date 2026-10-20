@@ -34,6 +34,7 @@ class Game:
         self.message_timer=0.0
         self.curve_crash_timer=0.0
         self.curve_warning_timer=0.0
+        self.curve_penalty_cooldown=0.0
         self.finish_order=[]
         self._reset_grid()
 
@@ -59,6 +60,7 @@ class Game:
         self.collision_cooldown=0.0
         self.curve_crash_timer=0.0
         self.curve_warning_timer=0.0
+        self.curve_penalty_cooldown=0.0
         self.message=""
         self.message_timer=0.0
         self.finish_order=[]
@@ -135,26 +137,34 @@ class Game:
         else:
             self.curve_warning_timer = max(0.0, self.curve_warning_timer-dt)
 
-        # Gentle automatic corner braking: braking earlier keeps a speed advantage.
-        if abs(curve) >= 0.25:
-            auto_brake = (abs(curve) - 0.20) * 24.0
+        # Smooth auto-braking increases with bend severity. Manual braking still helps.
+        bend = abs(curve)
+        if bend >= 0.18:
+            auto_brake = (bend - 0.12) * 30.0
             self.player.speed = max(0.0, self.player.speed - auto_brake * dt)
-        if abs(curve) >= 0.45 and self.player.speed > safe_corner_speed:
-            excess = self.player.speed - safe_corner_speed
-            self.curve_crash_timer += dt * (0.35 + excess/90.0)
-        else:
-            self.curve_crash_timer = max(0.0, self.curve_crash_timer-dt*1.8)
 
-        # Over-speed cornering pushes the vehicle visibly beyond the road edge.
-        if self.curve_crash_timer >= 1.8:
+        # Risk only accumulates while actually above a corner's safe speed.
+        safe_corner_speed = 218.0 - min(1.0, bend) * 112.0
+        over_speed = bend >= 0.38 and self.player.speed > safe_corner_speed
+        if over_speed:
+            excess_ratio = (self.player.speed-safe_corner_speed) / max(1.0, safe_corner_speed)
+            self.curve_crash_timer += dt * min(1.6, 0.35 + excess_ratio*2.0)
+        else:
+            self.curve_crash_timer = max(0.0, self.curve_crash_timer-dt*2.5)
+
+        # Penalize repeated high-speed cornering; never end the race mid-course.
+        self.curve_penalty_cooldown = max(0.0, self.curve_penalty_cooldown-dt)
+        if self.curve_crash_timer >= 1.4 and self.curve_penalty_cooldown <= 0.0:
             bend_direction = 1.0 if curve > 0 else -1.0
-            self.player.lane = clamp(self.player.lane + bend_direction*0.65, -1.45, 1.45)
-            self.player.damage = min(100, self.player.damage+22)
-            self.player.speed *= 0.48
-            self.player.hit_timer = 1.0
+            self.player.lane_target = clamp(getattr(self.player, 'lane_target', self.player.lane) + bend_direction*0.32, -1.32, 1.32)
+            self.player.damage = min(99, self.player.damage+8)
+            self.score = max(0, self.score-150)
+            self.player.speed *= 0.82
+            self.player.hit_timer = 0.45
             self.curve_crash_timer = 0.0
-            self.message = "WIDE ON CORNER! BRAKE EARLIER!"
-            self.message_timer = 1.5
+            self.curve_penalty_cooldown = 2.0
+            self.message = 'WIDE CORNER! -150 POINTS'
+            self.message_timer = 1.4
 
         speed_factor=self.player.speed/3.6
         self.player.progress += speed_factor*dt
@@ -197,9 +207,9 @@ class Game:
             self.player.progress=FINISH_LINE_DISTANCE
             self.state="FINISHED"
             self.finish_order=sorted([("YOU", self.player.progress, self.score)] + [(r.name, r.progress, 0) for r in self.rivals], key=lambda item:item[1], reverse=True)
-        elif self.time_left<=0 or self.player.damage>=100:
+        elif self.time_left<=0:
             self.finish_order=sorted([("YOU", self.player.progress, self.score)] + [(r.name, r.progress, 0) for r in self.rivals], key=lambda item:item[1], reverse=True)
-            self.state="GAMEOVER"
+            self.state="FINISHED"
 
     def _draw_race(self):
         self.world.distance_traveled=self.player.progress
