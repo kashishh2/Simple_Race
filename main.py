@@ -55,6 +55,7 @@ class Game:
         for rival in self.rivals:
             rival.vehicle_type = self.vehicle_type
         self.score=0
+        self.center_score_timer=0.0
         self.elapsed=0.0
         self.time_left=LEVEL_TIME_LIMIT
         self.countdown=3.0
