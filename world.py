@@ -220,6 +220,16 @@ class World:
             pygame.draw.polygon(surface,COLOR_SHOULDER,[(center0-w0/2-sh0,y0),(center0-w0/2,y0),(center1-w1/2,y1),(center1-w1/2-sh1,y1)])
             pygame.draw.polygon(surface,COLOR_SHOULDER,[(center0+w0/2,y0),(center0+w0/2+sh0,y0),(center1+w1/2+sh1,y1),(center1+w1/2,y1)])
             pygame.draw.polygon(surface,road_color,[(center0-w0/2,y0),(center0+w0/2,y0),(center1+w1/2,y1),(center1-w1/2,y1)])
+            # Classic arcade red/cream rumble strips make curves and speed more legible.
+            if phase == 0:
+                curb0,curb1=max(2,w0*0.035),max(3,w1*0.035)
+                curb_color=(205,38,38) if (i+int(self.distance_traveled/22))%4 < 2 else (245,235,210)
+                pygame.draw.polygon(surface,curb_color,[
+                    (center0-w0/2-sh0,y0),(center0-w0/2,y0),
+                    (center1-w1/2,y1),(center1-w1/2-sh1,y1)])
+                pygame.draw.polygon(surface,curb_color,[
+                    (center0+w0/2,y0),(center0+w0/2+sh0,y0),
+                    (center1+w1/2+sh1,y1),(center1+w1/2,y1)])
             edge0,edge1=max(1,w0*0.012),max(2,w1*0.012)
             pygame.draw.polygon(surface,COLOR_WHITE,[(center0-w0/2,y0),(center0-w0/2+edge0,y0),(center1-w1/2+edge1,y1),(center1-w1/2,y1)])
             pygame.draw.polygon(surface,COLOR_WHITE,[(center0+w0/2-edge0,y0),(center0+w0/2,y0),(center1+w1/2,y1),(center1+w1/2-edge1,y1)])
