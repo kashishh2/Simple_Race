@@ -298,7 +298,7 @@ class Rival(Car):
         target_speed = clamp(target_speed, 125.0, 222.0)
         if self.stunned <= 0:
             acceleration = 15.0 if self.speed < target_speed else 0.0
-            deceleration = (30.0 if curve_load > 0.45 else 10.0) if self.speed > target_speed else 0.0
+            deceleration = (34.0 if curve_load > 0.45 else 10.0) if self.speed > target_speed else 0.0
             self.speed += (acceleration - deceleration) * dt
             self.speed = min(target_speed, self.speed)
 
