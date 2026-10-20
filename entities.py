@@ -57,8 +57,8 @@ class Car:
                 tint = getattr(self, "rider_color", self.color)
                 tinted = sprite.copy()
                 tint_layer = pygame.Surface(tinted.get_size(), pygame.SRCALPHA)
-                tint_layer.fill((*tint, 255))
-                tinted.blit(tint_layer, (0,0), special_flags=pygame.BLEND_RGBA_MULT)
+                tint_layer.fill((*tint, 95))
+                tinted.blit(tint_layer, (0,0))
                 sprite = tinted
                 # Bright number plate/marker remains readable even at small scale.
                 surface.blit(sprite, (x-sprite.get_width()//2, y-sprite.get_height()))
@@ -78,30 +78,30 @@ class Car:
         w = max(8, int(self.base_width * scale))
         h = max(7, int(self.base_height * scale))
         left, top = x - w // 2, y - h
-        # Use an actual car sprite when available, scaled for pseudo-3D depth.
-        sprite, _ = assets.first(("cars/player_car.png", "cars/player_car_blue.png",
-                                  "cars/player_car_yellow.png"))
-        if sprite is not None:
-            target = (max(8, int(70*scale)), max(7, int(52*scale)))
-            sprite = pygame.transform.smoothscale(sprite, target)
-            surface.blit(sprite, (x-sprite.get_width()//2, y-sprite.get_height()))
-            return
-        wheel_w, wheel_h = max(2, w // 8), max(2, h // 3)
-        pygame.draw.rect(surface, COLOR_BLACK, (left + w // 10, y - wheel_h, wheel_w, wheel_h))
-        pygame.draw.rect(surface, COLOR_BLACK, (left + w - w // 10 - wheel_w, y - wheel_h, wheel_w, wheel_h))
-        pygame.draw.polygon(surface, (25,22,27), [
-            (left+w//8,top+h//4),(left+w//4,top),(left+w*3//4,top),
-            (left+w*7//8,top+h//4),(left+w,y-h//7),(left,y-h//7)])
-        pygame.draw.polygon(surface,self.color,[
-            (left+w//8,top+h//4),(left+w//4,top+h//12),(left+w*3//4,top+h//12),
-            (left+w*7//8,top+h//4),(left+w*15//16,y-h//7),(left+w//16,y-h//7)])
-        if scale > 0.24:
-            win=pygame.Rect(left+w//4,top+h//9,max(3,w//2),max(2,h//4))
-            pygame.draw.rect(surface,(20,38,58),win)
-            pygame.draw.rect(surface,(95,185,220),win.inflate(-max(1,w//12),-max(1,h//12)))
-            light_w,light_h=max(2,w//7),max(2,h//8)
-            pygame.draw.rect(surface,(255,35,30),(left+w//12,y-h//3,light_w,light_h))
-            pygame.draw.rect(surface,(255,35,30),(left+w-w//12-light_w,y-h//3,light_w,light_h))
+        # Distinct rear-view arcade car with tires, cabin, bumper and tail lamps.
+        wheel_w, wheel_h = max(2, w // 9), max(3, h // 2)
+        pygame.draw.ellipse(surface, (8,9,12), (left+w//12, y-wheel_h, wheel_w, wheel_h))
+        pygame.draw.ellipse(surface, (8,9,12), (left+w-w//12-wheel_w, y-wheel_h, wheel_w, wheel_h))
+        pygame.draw.polygon(surface, (18,18,23), [
+            (left+w//8,top+h//3),(left+w//4,top+h//12),(left+w*3//4,top+h//12),
+            (left+w*7//8,top+h//3),(left+w,y-h//6),(left+w*9//10,y),
+            (left+w//10,y),(left,y-h//6)])
+        pygame.draw.polygon(surface, self.color, [
+            (left+w//8,top+h//3),(left+w//4,top+h//8),(left+w*3//4,top+h//8),
+            (left+w*7//8,top+h//3),(left+w*15//16,y-h//6),(left+w*9//10,y-h//8),
+            (left+w//10,y-h//8),(left+w//16,y-h//6)])
+        window = [(left+w//3,top+h//7),(left+w*2//3,top+h//7),
+                  (left+w*3//4,top+h//3),(left+w//4,top+h//3)]
+        pygame.draw.polygon(surface, (18,35,49), window)
+        pygame.draw.line(surface, (105,170,190), window[0], window[3], max(1,int(scale*2)))
+        pygame.draw.line(surface, (105,170,190), window[1], window[2], max(1,int(scale*2)))
+        pygame.draw.rect(surface, (28,29,34), (left+w//12,y-h//5,w*5//6,max(2,h//8)))
+        lamp_w,lamp_h=max(2,w//7),max(2,h//8)
+        pygame.draw.rect(surface,(255,55,40),(left+w//9,top+h//2,lamp_w,lamp_h))
+        pygame.draw.rect(surface,(255,55,40),(left+w-w//9-lamp_w,top+h//2,lamp_w,lamp_h))
+        pygame.draw.rect(surface,(235,232,215),(x-max(2,w//8),y-h//5,max(4,w//4),max(2,h//10)))
+        highlight=tuple(max(0,min(255,c+35)) for c in self.color)
+        pygame.draw.line(surface,highlight,(left+w//5,top+h//2),(left+w*4//5,top+h//2),max(1,int(scale*2)))
 
 
 
@@ -133,7 +133,7 @@ class Player(Car):
             self.speed -= PLAYER_DRAG * dt
 
         if self.nitro_active:
-            self.speed += 35.0 * dt
+            self.speed += 42.0 * dt
             self.nitro = max(0.0, self.nitro - 26.0 * dt)
         else:
             self.nitro = min(100.0, self.nitro + 5.0 * dt)
