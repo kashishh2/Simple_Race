@@ -26,6 +26,7 @@ class Game:
         self.hud=HUD()
         self.font=PixelFont()
         self.score=0
+        self.center_score_timer=0.0
         self.elapsed=0.0
         self.time_left=LEVEL_TIME_LIMIT
         self.countdown=3.0
@@ -124,6 +125,17 @@ class Game:
         upcoming_curve=self.world.curve_at(self.player.progress+190)
         keys=pygame.key.get_pressed()
         self.player.update(keys,dt,curve)
+
+        # Reward holding a central racing line. Terrain drift means the rider must
+        # counter-steer through bends instead of simply leaving the keys untouched.
+        if self.player.speed >= 60.0 and abs(self.player.lane) <= 0.18:
+            self.center_score_timer += dt
+            if self.center_score_timer >= 1.0:
+                earned = int(self.center_score_timer)
+                self.score += earned * 25
+                self.center_score_timer -= earned
+        else:
+            self.center_score_timer = 0.0
 
         # Warn before severe corners and enforce a safe cornering speed.
         warning_curve = upcoming_curve if abs(upcoming_curve) > abs(curve) else curve
