@@ -135,17 +135,26 @@ class Game:
         else:
             self.curve_warning_timer = max(0.0, self.curve_warning_timer-dt)
 
+        # Gentle automatic corner braking: braking earlier keeps a speed advantage.
+        if abs(curve) >= 0.25:
+            auto_brake = (abs(curve) - 0.20) * 24.0
+            self.player.speed = max(0.0, self.player.speed - auto_brake * dt)
         if abs(curve) >= 0.45 and self.player.speed > safe_corner_speed:
-            self.curve_crash_timer += dt * (1.0 + (self.player.speed-safe_corner_speed)/35.0)
-            if self.curve_crash_timer >= 1.15:
-                self.player.damage = min(100, self.player.damage+35)
-                self.player.speed *= 0.42
-                self.player.hit_timer = 1.0
-                self.curve_crash_timer = 0.0
-                self.message = "CORNER CRASH! BRAKE BEFORE BENDS!"
-                self.message_timer = 1.6
+            excess = self.player.speed - safe_corner_speed
+            self.curve_crash_timer += dt * (0.35 + excess/90.0)
         else:
             self.curve_crash_timer = max(0.0, self.curve_crash_timer-dt*1.8)
+
+        # Over-speed cornering pushes the vehicle visibly beyond the road edge.
+        if self.curve_crash_timer >= 1.8:
+            bend_direction = 1.0 if curve > 0 else -1.0
+            self.player.lane = clamp(self.player.lane + bend_direction*0.65, -1.45, 1.45)
+            self.player.damage = min(100, self.player.damage+22)
+            self.player.speed *= 0.48
+            self.player.hit_timer = 1.0
+            self.curve_crash_timer = 0.0
+            self.message = "WIDE ON CORNER! BRAKE EARLIER!"
+            self.message_timer = 1.5
 
         speed_factor=self.player.speed/3.6
         self.player.progress += speed_factor*dt
@@ -217,7 +226,8 @@ class Game:
             scale=max(0.12,min(1.30,scale))
             rival.draw(self.screen,x,y,scale,False)
 
-        player_center=SCREEN_WIDTH/2+self.player.lane*205
+        player_curve = self.world.curve_at(self.player.progress+20)
+        player_center=SCREEN_WIDTH/2+self.player.lane*250-player_curve*62
         self.player.draw_player(self.screen,player_center)
         remaining=max(0,FINISH_LINE_DISTANCE-self.player.progress)
         self.hud.draw(self.screen,self.time_left,self.player.speed,self.score,
