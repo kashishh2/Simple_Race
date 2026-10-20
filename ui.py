@@ -54,7 +54,8 @@ class HUD:
         pygame.draw.rect(surface,COLOR_WHITE,(x+2,y+2,w-4,h-4),1)
         self.font.draw(surface,text,x+5,y+4,scale,COLOR_BLACK,False)
 
-    def draw(self,surface,time_left,speed,score,position,total_riders,distance,nitro,damage):
+    def draw(self,surface,time_left,speed,score,position,total_riders,distance,nitro,damage,vehicle_type="BIKE"):
+        self.vehicle_label = vehicle_type
         self._label(surface,"TIME",12,9,(245,115,55))
         self.font.number(surface,max(0,time_left),78,12,3,COLOR_YELLOW)
         self._label(surface,"SCORE",195,9,COLOR_MAGENTA)
@@ -68,7 +69,7 @@ class HUD:
         self._bar(surface,112,SCREEN_HEIGHT-44,180,14,speed/280.0,COLOR_CYAN)
         self.font.draw(surface,"NITRO",112,SCREEN_HEIGHT-65,2,COLOR_YELLOW)
         self._bar(surface,170,SCREEN_HEIGHT-64,122,10,nitro/100.0,(55,210,255))
-        self.font.draw(surface,"BIKE",315,SCREEN_HEIGHT-65,2,COLOR_WHITE)
+        self.font.draw(surface,self.vehicle_label,315,SCREEN_HEIGHT-65,2,COLOR_WHITE)
         self._bar(surface,365,SCREEN_HEIGHT-64,90,10,1-damage/100.0,(70,230,90))
         self.font.draw(surface,"DIST",SCREEN_WIDTH-135,SCREEN_HEIGHT-70,2,COLOR_WHITE)
         self.font.number(surface,max(0,int(distance)),SCREEN_WIDTH-135,SCREEN_HEIGHT-48,2,COLOR_YELLOW)
