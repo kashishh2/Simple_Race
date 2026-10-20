@@ -218,7 +218,7 @@ class Player(Car):
         sprite = frames.get(frame_key) or frames.get("upright")
         if sprite is not None:
             iw, ih = sprite.get_size()
-            factor = min(100/max(1, iw), 142/max(1, ih))
+            factor = min(124/max(1, iw), 166/max(1, ih))
             sprite = pygame.transform.smoothscale(
                 sprite, (max(1, int(iw*factor)), max(1, int(ih*factor))))
             surface.blit(sprite, (int(center_x-sprite.get_width()/2),
