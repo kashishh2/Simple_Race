@@ -155,9 +155,10 @@ class Player(Car):
         speed_ratio = self.speed / max(1.0, PLAYER_MAX_SPEED)
         steer_effectiveness = max(0.82, 1.0 - speed_ratio * 0.18)
         steer_rate = 3.5 * steer_effectiveness
-        # A bend now creates a strong lateral force at racing speed. With no
-        # counter-steering, the bike visibly washes toward the outside of the turn.
-        curve_drift = curve * speed_ratio * 1.7
+        # Only sharp turns physically wash the bike sideways. Gentle bends
+        # still change the road's visible path, but do not constantly pull the bike.
+        sharp_turn = max(0.0, (abs(curve) - 0.62) / 0.38)
+        curve_drift = (1.0 if curve >= 0 else -1.0) * sharp_turn * speed_ratio * 2.2
         lateral_rate = steer * steer_rate - curve_drift
         self.lane = clamp(self.lane + lateral_rate * dt, -MAX_LANE, MAX_LANE)
         self.hit_timer = max(0.0, self.hit_timer - dt)
