@@ -161,7 +161,7 @@ class Player(Car):
     def _draw_car_player(self, surface, center_x):
         # Low, wide rear-view coupe with a short cabin, not a tall van profile.
         bottom = SCREEN_HEIGHT - 14
-        w, h = 232, 94
+        w, h = 190, 78
         left, top = int(center_x - w/2), bottom-h
         pygame.draw.ellipse(surface, (25,35,30), (left+12,bottom-13,w-24,20))
         # Wide rear tires and wheel arches.
