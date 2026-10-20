@@ -65,18 +65,13 @@ class Game:
                     else:
                         self.running=False
                 elif self.state=="MENU":
-                    if event.key in (pygame.K_UP,pygame.K_w):
+                    if event.key in (pygame.K_UP, pygame.K_w):
+                        self.selected = (self.selected - 1) % 4
+                    elif event.key in (pygame.K_DOWN, pygame.K_s):
+                        self.selected = (self.selected + 1) % 4
+                    elif event.key in (pygame.K_LEFT, pygame.K_RIGHT):
                         if self.selected == 1:
                             self.vehicle_type = "CAR" if self.vehicle_type == "BIKE" else "BIKE"
-                        else:
-                            self.selected=(self.selected-1)%4
-                    elif event.key in (pygame.K_DOWN,pygame.K_s):
-                        if self.selected == 1:
-                            self.vehicle_type = "CAR" if self.vehicle_type == "BIKE" else "BIKE"
-                        else:
-                            self.selected=(self.selected+1)%4
-                    elif event.key in (pygame.K_LEFT, pygame.K_RIGHT) and self.selected == 1:
-                        self.vehicle_type = "CAR" if self.vehicle_type == "BIKE" else "BIKE"
                     elif event.key==pygame.K_RETURN:
                         if self.selected==0:
                             self.reset()
