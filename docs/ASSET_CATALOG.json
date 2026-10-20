@@ -1,0 +1,1208 @@
+[
+    {
+        "id": "scenery_contact_sheet.png",
+        "path": "./docs/scenery_contact_sheet.png",
+        "size_bytes": 363205,
+        "format": "png",
+        "dimensions": "660x960",
+        "has_alpha": false,
+        "type": "image"
+    },
+    {
+        "id": "bikes_contact_sheet.png",
+        "path": "./docs/bikes_contact_sheet.png",
+        "size_bytes": 233502,
+        "format": "png",
+        "dimensions": "660x480",
+        "has_alpha": false,
+        "type": "image"
+    },
+    {
+        "id": "pygame_icon_mac.bmp",
+        "path": "./.venv/lib/python3.14/site-packages/pygame/pygame_icon_mac.bmp",
+        "size_bytes": 262282,
+        "format": "bmp",
+        "dimensions": "256x256",
+        "has_alpha": true,
+        "type": "image"
+    },
+    {
+        "id": "pygame_icon.bmp",
+        "path": "./.venv/lib/python3.14/site-packages/pygame/pygame_icon.bmp",
+        "size_bytes": 630,
+        "format": "bmp",
+        "dimensions": "32x32",
+        "has_alpha": false,
+        "type": "image"
+    },
+    {
+        "id": "A_PyGameMono-8.png",
+        "path": "./.venv/lib/python3.14/site-packages/pygame/tests/fixtures/fonts/A_PyGameMono-8.png",
+        "size_bytes": 92,
+        "format": "png",
+        "dimensions": "6x7",
+        "has_alpha": false,
+        "type": "image"
+    },
+    {
+        "id": "u13079_PyGameMono-8.png",
+        "path": "./.venv/lib/python3.14/site-packages/pygame/tests/fixtures/fonts/u13079_PyGameMono-8.png",
+        "size_bytes": 89,
+        "format": "png",
+        "dimensions": "6x4",
+        "has_alpha": false,
+        "type": "image"
+    },
+    {
+        "id": "pygame_ce_powered.webp",
+        "path": "./.venv/lib/python3.14/site-packages/pygame/docs/generated/_static/pygame_ce_powered.webp",
+        "size_bytes": 150210,
+        "format": "webp",
+        "dimensions": "1560x824",
+        "has_alpha": true,
+        "type": "image"
+    },
+    {
+        "id": "plus.png",
+        "path": "./.venv/lib/python3.14/site-packages/pygame/docs/generated/_static/plus.png",
+        "size_bytes": 90,
+        "format": "png",
+        "dimensions": "11x11",
+        "has_alpha": false,
+        "type": "image"
+    },
+    {
+        "id": "pygame_ce_logo.webp",
+        "path": "./.venv/lib/python3.14/site-packages/pygame/docs/generated/_static/pygame_ce_logo.webp",
+        "size_bytes": 127910,
+        "format": "webp",
+        "dimensions": "1560x800",
+        "has_alpha": true,
+        "type": "image"
+    },
+    {
+        "id": "pygame_ce_lofi.webp",
+        "path": "./.venv/lib/python3.14/site-packages/pygame/docs/generated/_static/pygame_ce_lofi.webp",
+        "size_bytes": 126562,
+        "format": "webp",
+        "dimensions": "1560x800",
+        "has_alpha": true,
+        "type": "image"
+    },
+    {
+        "id": "file.png",
+        "path": "./.venv/lib/python3.14/site-packages/pygame/docs/generated/_static/file.png",
+        "size_bytes": 286,
+        "format": "png",
+        "dimensions": "16x16",
+        "has_alpha": true,
+        "type": "image"
+    },
+    {
+        "id": "pygame_ce_powered_lowres.webp",
+        "path": "./.venv/lib/python3.14/site-packages/pygame/docs/generated/_static/pygame_ce_powered_lowres.webp",
+        "size_bytes": 8758,
+        "format": "webp",
+        "dimensions": "101x53",
+        "has_alpha": true,
+        "type": "image"
+    },
+    {
+        "id": "minus.png",
+        "path": "./.venv/lib/python3.14/site-packages/pygame/docs/generated/_static/minus.png",
+        "size_bytes": 90,
+        "format": "png",
+        "dimensions": "11x11",
+        "has_alpha": false,
+        "type": "image"
+    },
+    {
+        "id": "pygame_ce_tiny.webp",
+        "path": "./.venv/lib/python3.14/site-packages/pygame/docs/generated/_static/pygame_ce_tiny.webp",
+        "size_bytes": 17814,
+        "format": "webp",
+        "dimensions": "214x110",
+        "has_alpha": true,
+        "type": "image"
+    },
+    {
+        "id": "joystick_calls.png",
+        "path": "./.venv/lib/python3.14/site-packages/pygame/docs/generated/_images/joystick_calls.png",
+        "size_bytes": 30004,
+        "format": "png",
+        "dimensions": "502x502",
+        "has_alpha": true,
+        "type": "image"
+    },
+    {
+        "id": "pygame_ce_powered.webp",
+        "path": "./.venv/lib/python3.14/site-packages/pygame/docs/generated/_images/pygame_ce_powered.webp",
+        "size_bytes": 150210,
+        "format": "webp",
+        "dimensions": "1560x824",
+        "has_alpha": true,
+        "type": "image"
+    },
+    {
+        "id": "camera_rgb.jpg",
+        "path": "./.venv/lib/python3.14/site-packages/pygame/docs/generated/_images/camera_rgb.jpg",
+        "size_bytes": 32488,
+        "format": "jpg",
+        "dimensions": "320x240",
+        "has_alpha": false,
+        "type": "image"
+    },
+    {
+        "id": "intro_freedom.jpg",
+        "path": "./.venv/lib/python3.14/site-packages/pygame/docs/generated/_images/intro_freedom.jpg",
+        "size_bytes": 7050,
+        "format": "jpg",
+        "dimensions": "200x150",
+        "has_alpha": false,
+        "type": "image"
+    },
+    {
+        "id": "camera_mask.jpg",
+        "path": "./.venv/lib/python3.14/site-packages/pygame/docs/generated/_images/camera_mask.jpg",
+        "size_bytes": 18779,
+        "format": "jpg",
+        "dimensions": "320x240",
+        "has_alpha": false,
+        "type": "image"
+    },
+    {
+        "id": "tom_event-flowchart.webp",
+        "path": "./.venv/lib/python3.14/site-packages/pygame/docs/generated/_images/tom_event-flowchart.webp",
+        "size_bytes": 2670,
+        "format": "webp",
+        "dimensions": "642x37",
+        "has_alpha": true,
+        "type": "image"
+    },
+    {
+        "id": "tom_radians.webp",
+        "path": "./.venv/lib/python3.14/site-packages/pygame/docs/generated/_images/tom_radians.webp",
+        "size_bytes": 9758,
+        "format": "webp",
+        "dimensions": "578x312",
+        "has_alpha": true,
+        "type": "image"
+    },
+    {
+        "id": "camera_thresh.jpg",
+        "path": "./.venv/lib/python3.14/site-packages/pygame/docs/generated/_images/camera_thresh.jpg",
+        "size_bytes": 4346,
+        "format": "jpg",
+        "dimensions": "320x240",
+        "has_alpha": false,
+        "type": "image"
+    },
+    {
+        "id": "premultiplied_alpha_composition.webp",
+        "path": "./.venv/lib/python3.14/site-packages/pygame/docs/generated/_images/premultiplied_alpha_composition.webp",
+        "size_bytes": 4524,
+        "format": "webp",
+        "dimensions": "302x202",
+        "has_alpha": false,
+        "type": "image"
+    },
+    {
+        "id": "chimpshot.webp",
+        "path": "./.venv/lib/python3.14/site-packages/pygame/docs/generated/_images/chimpshot.webp",
+        "size_bytes": 28298,
+        "format": "webp",
+        "dimensions": "1320x550",
+        "has_alpha": false,
+        "type": "image"
+    },
+    {
+        "id": "surfarray_scaleup.webp",
+        "path": "./.venv/lib/python3.14/site-packages/pygame/docs/generated/_images/surfarray_scaleup.webp",
+        "size_bytes": 47414,
+        "format": "webp",
+        "dimensions": "400x256",
+        "has_alpha": false,
+        "type": "image"
+    },
+    {
+        "id": "surfarray_striped.webp",
+        "path": "./.venv/lib/python3.14/site-packages/pygame/docs/generated/_images/surfarray_striped.webp",
+        "size_bytes": 52,
+        "format": "webp",
+        "dimensions": "128x128",
+        "has_alpha": false,
+        "type": "image"
+    },
+    {
+        "id": "project_clamp.png",
+        "path": "./.venv/lib/python3.14/site-packages/pygame/docs/generated/_images/project_clamp.png",
+        "size_bytes": 30877,
+        "format": "png",
+        "dimensions": "424x503",
+        "has_alpha": true,
+        "type": "image"
+    },
+    {
+        "id": "pygame_ce_logo.webp",
+        "path": "./.venv/lib/python3.14/site-packages/pygame/docs/generated/_images/pygame_ce_logo.webp",
+        "size_bytes": 127910,
+        "format": "webp",
+        "dimensions": "1560x800",
+        "has_alpha": true,
+        "type": "image"
+    },
+    {
+        "id": "camera_background.jpg",
+        "path": "./.venv/lib/python3.14/site-packages/pygame/docs/generated/_images/camera_background.jpg",
+        "size_bytes": 7493,
+        "format": "jpg",
+        "dimensions": "320x240",
+        "has_alpha": false,
+        "type": "image"
+    },
+    {
+        "id": "pygame_ce_lofi.webp",
+        "path": "./.venv/lib/python3.14/site-packages/pygame/docs/generated/_images/pygame_ce_lofi.webp",
+        "size_bytes": 126562,
+        "format": "webp",
+        "dimensions": "1560x800",
+        "has_alpha": true,
+        "type": "image"
+    },
+    {
+        "id": "surfarray_redimg.webp",
+        "path": "./.venv/lib/python3.14/site-packages/pygame/docs/generated/_images/surfarray_redimg.webp",
+        "size_bytes": 15926,
+        "format": "webp",
+        "dimensions": "200x128",
+        "has_alpha": false,
+        "type": "image"
+    },
+    {
+        "id": "pygame_ce_powered_lowres.webp",
+        "path": "./.venv/lib/python3.14/site-packages/pygame/docs/generated/_images/pygame_ce_powered_lowres.webp",
+        "size_bytes": 8758,
+        "format": "webp",
+        "dimensions": "101x53",
+        "has_alpha": true,
+        "type": "image"
+    },
+    {
+        "id": "camera_hsv.jpg",
+        "path": "./.venv/lib/python3.14/site-packages/pygame/docs/generated/_images/camera_hsv.jpg",
+        "size_bytes": 36673,
+        "format": "jpg",
+        "dimensions": "320x240",
+        "has_alpha": false,
+        "type": "image"
+    },
+    {
+        "id": "surfarray_xfade.webp",
+        "path": "./.venv/lib/python3.14/site-packages/pygame/docs/generated/_images/surfarray_xfade.webp",
+        "size_bytes": 30274,
+        "format": "webp",
+        "dimensions": "200x128",
+        "has_alpha": false,
+        "type": "image"
+    },
+    {
+        "id": "angle_to.png",
+        "path": "./.venv/lib/python3.14/site-packages/pygame/docs/generated/_images/angle_to.png",
+        "size_bytes": 25349,
+        "format": "png",
+        "dimensions": "499x534",
+        "has_alpha": true,
+        "type": "image"
+    },
+    {
+        "id": "intro_ball.webp",
+        "path": "./.venv/lib/python3.14/site-packages/pygame/docs/generated/_images/intro_ball.webp",
+        "size_bytes": 3588,
+        "format": "webp",
+        "dimensions": "111x111",
+        "has_alpha": true,
+        "type": "image"
+    },
+    {
+        "id": "project.png",
+        "path": "./.venv/lib/python3.14/site-packages/pygame/docs/generated/_images/project.png",
+        "size_bytes": 14532,
+        "format": "png",
+        "dimensions": "410x324",
+        "has_alpha": true,
+        "type": "image"
+    },
+    {
+        "id": "camera_average.jpg",
+        "path": "./.venv/lib/python3.14/site-packages/pygame/docs/generated/_images/camera_average.jpg",
+        "size_bytes": 20881,
+        "format": "jpg",
+        "dimensions": "320x240",
+        "has_alpha": false,
+        "type": "image"
+    },
+    {
+        "id": "surfarray_allblack.webp",
+        "path": "./.venv/lib/python3.14/site-packages/pygame/docs/generated/_images/surfarray_allblack.webp",
+        "size_bytes": 42,
+        "format": "webp",
+        "dimensions": "128x128",
+        "has_alpha": false,
+        "type": "image"
+    },
+    {
+        "id": "tom_formulae.webp",
+        "path": "./.venv/lib/python3.14/site-packages/pygame/docs/generated/_images/tom_formulae.webp",
+        "size_bytes": 2626,
+        "format": "webp",
+        "dimensions": "480x49",
+        "has_alpha": false,
+        "type": "image"
+    },
+    {
+        "id": "surfarray_scaledown.webp",
+        "path": "./.venv/lib/python3.14/site-packages/pygame/docs/generated/_images/surfarray_scaledown.webp",
+        "size_bytes": 12840,
+        "format": "webp",
+        "dimensions": "100x64",
+        "has_alpha": false,
+        "type": "image"
+    },
+    {
+        "id": "pygame_ce_tiny.webp",
+        "path": "./.venv/lib/python3.14/site-packages/pygame/docs/generated/_images/pygame_ce_tiny.webp",
+        "size_bytes": 17814,
+        "format": "webp",
+        "dimensions": "214x110",
+        "has_alpha": true,
+        "type": "image"
+    },
+    {
+        "id": "camera_thresholded.jpg",
+        "path": "./.venv/lib/python3.14/site-packages/pygame/docs/generated/_images/camera_thresholded.jpg",
+        "size_bytes": 23678,
+        "format": "jpg",
+        "dimensions": "320x240",
+        "has_alpha": false,
+        "type": "image"
+    },
+    {
+        "id": "straight_alpha_composition.webp",
+        "path": "./.venv/lib/python3.14/site-packages/pygame/docs/generated/_images/straight_alpha_composition.webp",
+        "size_bytes": 4270,
+        "format": "webp",
+        "dimensions": "302x202",
+        "has_alpha": false,
+        "type": "image"
+    },
+    {
+        "id": "intro_blade.jpg",
+        "path": "./.venv/lib/python3.14/site-packages/pygame/docs/generated/_images/intro_blade.jpg",
+        "size_bytes": 2631,
+        "format": "jpg",
+        "dimensions": "200x150",
+        "has_alpha": false,
+        "type": "image"
+    },
+    {
+        "id": "tom_basic.webp",
+        "path": "./.venv/lib/python3.14/site-packages/pygame/docs/generated/_images/tom_basic.webp",
+        "size_bytes": 4522,
+        "format": "webp",
+        "dimensions": "157x83",
+        "has_alpha": false,
+        "type": "image"
+    },
+    {
+        "id": "surfarray_rgbarray.webp",
+        "path": "./.venv/lib/python3.14/site-packages/pygame/docs/generated/_images/surfarray_rgbarray.webp",
+        "size_bytes": 38938,
+        "format": "webp",
+        "dimensions": "200x128",
+        "has_alpha": false,
+        "type": "image"
+    },
+    {
+        "id": "surfarray_flipped.webp",
+        "path": "./.venv/lib/python3.14/site-packages/pygame/docs/generated/_images/surfarray_flipped.webp",
+        "size_bytes": 38804,
+        "format": "webp",
+        "dimensions": "200x128",
+        "has_alpha": false,
+        "type": "image"
+    },
+    {
+        "id": "camera_yuv.jpg",
+        "path": "./.venv/lib/python3.14/site-packages/pygame/docs/generated/_images/camera_yuv.jpg",
+        "size_bytes": 20105,
+        "format": "jpg",
+        "dimensions": "320x240",
+        "has_alpha": false,
+        "type": "image"
+    },
+    {
+        "id": "surfarray_soften.webp",
+        "path": "./.venv/lib/python3.14/site-packages/pygame/docs/generated/_images/surfarray_soften.webp",
+        "size_bytes": 34530,
+        "format": "webp",
+        "dimensions": "200x128",
+        "has_alpha": false,
+        "type": "image"
+    },
+    {
+        "id": "camera_green.jpg",
+        "path": "./.venv/lib/python3.14/site-packages/pygame/docs/generated/_images/camera_green.jpg",
+        "size_bytes": 10219,
+        "format": "jpg",
+        "dimensions": "320x240",
+        "has_alpha": false,
+        "type": "image"
+    },
+    {
+        "id": "draw_module_example.png",
+        "path": "./.venv/lib/python3.14/site-packages/pygame/docs/generated/_images/draw_module_example.png",
+        "size_bytes": 13444,
+        "format": "png",
+        "dimensions": "400x330",
+        "has_alpha": true,
+        "type": "image"
+    },
+    {
+        "id": "arraydemo.webp",
+        "path": "./.venv/lib/python3.14/site-packages/pygame/examples/data/arraydemo.webp",
+        "size_bytes": 39180,
+        "format": "webp",
+        "dimensions": "200x128",
+        "has_alpha": false,
+        "type": "image"
+    },
+    {
+        "id": "fist.webp",
+        "path": "./.venv/lib/python3.14/site-packages/pygame/examples/data/fist.webp",
+        "size_bytes": 48246,
+        "format": "webp",
+        "dimensions": "300x424",
+        "has_alpha": false,
+        "type": "image"
+    },
+    {
+        "id": "liquid.webp",
+        "path": "./.venv/lib/python3.14/site-packages/pygame/examples/data/liquid.webp",
+        "size_bytes": 1810,
+        "format": "webp",
+        "dimensions": "172x132",
+        "has_alpha": false,
+        "type": "image"
+    },
+    {
+        "id": "city.png",
+        "path": "./.venv/lib/python3.14/site-packages/pygame/examples/data/city.png",
+        "size_bytes": 143,
+        "format": "png",
+        "dimensions": "24x24",
+        "has_alpha": true,
+        "type": "image"
+    },
+    {
+        "id": "house_lo.mp3",
+        "path": "./.venv/lib/python3.14/site-packages/pygame/examples/data/house_lo.mp3",
+        "size_bytes": 116320,
+        "format": "mp3",
+        "dimensions": "Unknown",
+        "has_alpha": false,
+        "type": "audio"
+    },
+    {
+        "id": "secosmic_lo.wav",
+        "path": "./.venv/lib/python3.14/site-packages/pygame/examples/data/secosmic_lo.wav",
+        "size_bytes": 18700,
+        "format": "wav",
+        "dimensions": "Unknown",
+        "has_alpha": false,
+        "type": "audio"
+    },
+    {
+        "id": "chimp.webp",
+        "path": "./.venv/lib/python3.14/site-packages/pygame/examples/data/chimp.webp",
+        "size_bytes": 622,
+        "format": "webp",
+        "dimensions": "61x89",
+        "has_alpha": false,
+        "type": "image"
+    },
+    {
+        "id": "scarlet.webp",
+        "path": "./.venv/lib/python3.14/site-packages/pygame/examples/data/scarlet.webp",
+        "size_bytes": 82,
+        "format": "webp",
+        "dimensions": "32x32",
+        "has_alpha": false,
+        "type": "image"
+    },
+    {
+        "id": "frame.webp",
+        "path": "./.venv/lib/python3.14/site-packages/pygame/examples/data/frame.webp",
+        "size_bytes": 124,
+        "format": "webp",
+        "dimensions": "46x46",
+        "has_alpha": true,
+        "type": "image"
+    },
+    {
+        "id": "midikeys.webp",
+        "path": "./.venv/lib/python3.14/site-packages/pygame/examples/data/midikeys.webp",
+        "size_bytes": 9520,
+        "format": "webp",
+        "dimensions": "840x160",
+        "has_alpha": true,
+        "type": "image"
+    },
+    {
+        "id": "alien3.png",
+        "path": "./.venv/lib/python3.14/site-packages/pygame/examples/data/alien3.png",
+        "size_bytes": 3518,
+        "format": "png",
+        "dimensions": "80x71",
+        "has_alpha": true,
+        "type": "image"
+    },
+    {
+        "id": "boom.wav",
+        "path": "./.venv/lib/python3.14/site-packages/pygame/examples/data/boom.wav",
+        "size_bytes": 12562,
+        "format": "wav",
+        "dimensions": "Unknown",
+        "has_alpha": false,
+        "type": "audio"
+    },
+    {
+        "id": "alien2.png",
+        "path": "./.venv/lib/python3.14/site-packages/pygame/examples/data/alien2.png",
+        "size_bytes": 3526,
+        "format": "png",
+        "dimensions": "80x71",
+        "has_alpha": true,
+        "type": "image"
+    },
+    {
+        "id": "alien1.png",
+        "path": "./.venv/lib/python3.14/site-packages/pygame/examples/data/alien1.png",
+        "size_bytes": 3522,
+        "format": "png",
+        "dimensions": "80x71",
+        "has_alpha": true,
+        "type": "image"
+    },
+    {
+        "id": "alien1.jpg",
+        "path": "./.venv/lib/python3.14/site-packages/pygame/examples/data/alien1.jpg",
+        "size_bytes": 3103,
+        "format": "jpg",
+        "dimensions": "80x71",
+        "has_alpha": false,
+        "type": "image"
+    },
+    {
+        "id": "car_door.wav",
+        "path": "./.venv/lib/python3.14/site-packages/pygame/examples/data/car_door.wav",
+        "size_bytes": 3910,
+        "format": "wav",
+        "dimensions": "Unknown",
+        "has_alpha": false,
+        "type": "audio"
+    },
+    {
+        "id": "punch.wav",
+        "path": "./.venv/lib/python3.14/site-packages/pygame/examples/data/punch.wav",
+        "size_bytes": 4176,
+        "format": "wav",
+        "dimensions": "Unknown",
+        "has_alpha": false,
+        "type": "audio"
+    },
+    {
+        "id": "metadata.mp3",
+        "path": "./.venv/lib/python3.14/site-packages/pygame/examples/data/metadata.mp3",
+        "size_bytes": 1359,
+        "format": "mp3",
+        "dimensions": "Unknown",
+        "has_alpha": false,
+        "type": "audio"
+    },
+    {
+        "id": "laplacian.png",
+        "path": "./.venv/lib/python3.14/site-packages/pygame/examples/data/laplacian.png",
+        "size_bytes": 253,
+        "format": "png",
+        "dimensions": "32x32",
+        "has_alpha": false,
+        "type": "image"
+    },
+    {
+        "id": "BGR.png",
+        "path": "./.venv/lib/python3.14/site-packages/pygame/examples/data/BGR.png",
+        "size_bytes": 244,
+        "format": "png",
+        "dimensions": "50x50",
+        "has_alpha": false,
+        "type": "image"
+    },
+    {
+        "id": "whiff.wav",
+        "path": "./.venv/lib/python3.14/site-packages/pygame/examples/data/whiff.wav",
+        "size_bytes": 5850,
+        "format": "wav",
+        "dimensions": "Unknown",
+        "has_alpha": false,
+        "type": "audio"
+    },
+    {
+        "id": "house_lo.wav",
+        "path": "./.venv/lib/python3.14/site-packages/pygame/examples/data/house_lo.wav",
+        "size_bytes": 78464,
+        "format": "wav",
+        "dimensions": "Unknown",
+        "has_alpha": false,
+        "type": "audio"
+    },
+    {
+        "id": "static.webp",
+        "path": "./.venv/lib/python3.14/site-packages/pygame/examples/data/static.webp",
+        "size_bytes": 580,
+        "format": "webp",
+        "dimensions": "141x68",
+        "has_alpha": false,
+        "type": "image"
+    },
+    {
+        "id": "asprite.bmp",
+        "path": "./.venv/lib/python3.14/site-packages/pygame/examples/data/asprite.bmp",
+        "size_bytes": 578,
+        "format": "bmp",
+        "dimensions": "32x32",
+        "has_alpha": false,
+        "type": "image"
+    },
+    {
+        "id": "cursor.webp",
+        "path": "./.venv/lib/python3.14/site-packages/pygame/examples/data/cursor.webp",
+        "size_bytes": 960,
+        "format": "webp",
+        "dimensions": "125x20",
+        "has_alpha": false,
+        "type": "image"
+    },
+    {
+        "id": "house_lo.ogg",
+        "path": "./.venv/lib/python3.14/site-packages/pygame/examples/data/house_lo.ogg",
+        "size_bytes": 31334,
+        "format": "ogg",
+        "dimensions": "Unknown",
+        "has_alpha": false,
+        "type": "audio"
+    },
+    {
+        "id": "red.jpg",
+        "path": "./.venv/lib/python3.14/site-packages/pygame/examples/data/red.jpg",
+        "size_bytes": 1251,
+        "format": "jpg",
+        "dimensions": "32x32",
+        "has_alpha": false,
+        "type": "image"
+    },
+    {
+        "id": "brick.png",
+        "path": "./.venv/lib/python3.14/site-packages/pygame/examples/data/brick.png",
+        "size_bytes": 170,
+        "format": "png",
+        "dimensions": "469x137",
+        "has_alpha": true,
+        "type": "image"
+    },
+    {
+        "id": "position_panel.png",
+        "path": "./assets/ui/position_panel.png",
+        "size_bytes": 76858,
+        "format": "png",
+        "dimensions": "450x110",
+        "has_alpha": true,
+        "type": "image"
+    },
+    {
+        "id": "timer_panel.png",
+        "path": "./assets/ui/timer_panel.png",
+        "size_bytes": 84404,
+        "format": "png",
+        "dimensions": "535x110",
+        "has_alpha": true,
+        "type": "image"
+    },
+    {
+        "id": "nitro_bar.png",
+        "path": "./assets/ui/nitro_bar.png",
+        "size_bytes": 72504,
+        "format": "png",
+        "dimensions": "532x95",
+        "has_alpha": true,
+        "type": "image"
+    },
+    {
+        "id": "results_panel.png",
+        "path": "./assets/ui/results_panel.png",
+        "size_bytes": 155522,
+        "format": "png",
+        "dimensions": "498x230",
+        "has_alpha": true,
+        "type": "image"
+    },
+    {
+        "id": "countdown_321go.png",
+        "path": "./assets/ui/countdown_321go.png",
+        "size_bytes": 233053,
+        "format": "png",
+        "dimensions": "779x170",
+        "has_alpha": true,
+        "type": "image"
+    },
+    {
+        "id": "button_dark.png",
+        "path": "./assets/ui/button_dark.png",
+        "size_bytes": 40070,
+        "format": "png",
+        "dimensions": "349x75",
+        "has_alpha": true,
+        "type": "image"
+    },
+    {
+        "id": "button_red_alt.png",
+        "path": "./assets/ui/button_red_alt.png",
+        "size_bytes": 40877,
+        "format": "png",
+        "dimensions": "348x75",
+        "has_alpha": true,
+        "type": "image"
+    },
+    {
+        "id": "dust_ui.png",
+        "path": "./assets/ui/dust_ui.png",
+        "size_bytes": 70109,
+        "format": "png",
+        "dimensions": "220x232",
+        "has_alpha": true,
+        "type": "image"
+    },
+    {
+        "id": "chevrons_ui.png",
+        "path": "./assets/ui/chevrons_ui.png",
+        "size_bytes": 62897,
+        "format": "png",
+        "dimensions": "234x190",
+        "has_alpha": true,
+        "type": "image"
+    },
+    {
+        "id": "speedometer_panel.png",
+        "path": "./assets/ui/speedometer_panel.png",
+        "size_bytes": 217786,
+        "format": "png",
+        "dimensions": "434x299",
+        "has_alpha": true,
+        "type": "image"
+    },
+    {
+        "id": "tire_sparks_ui.png",
+        "path": "./assets/ui/tire_sparks_ui.png",
+        "size_bytes": 150955,
+        "format": "png",
+        "dimensions": "410x236",
+        "has_alpha": true,
+        "type": "image"
+    },
+    {
+        "id": "damage_bar.png",
+        "path": "./assets/ui/damage_bar.png",
+        "size_bytes": 73415,
+        "format": "png",
+        "dimensions": "457x100",
+        "has_alpha": true,
+        "type": "image"
+    },
+    {
+        "id": "menu_panel.png",
+        "path": "./assets/ui/menu_panel.png",
+        "size_bytes": 185260,
+        "format": "png",
+        "dimensions": "590x245",
+        "has_alpha": true,
+        "type": "image"
+    },
+    {
+        "id": "checkered_flag.png",
+        "path": "./assets/ui/checkered_flag.png",
+        "size_bytes": 101862,
+        "format": "png",
+        "dimensions": "320x190",
+        "has_alpha": true,
+        "type": "image"
+    },
+    {
+        "id": "sparks_ui.png",
+        "path": "./assets/ui/sparks_ui.png",
+        "size_bytes": 106673,
+        "format": "png",
+        "dimensions": "281x238",
+        "has_alpha": true,
+        "type": "image"
+    },
+    {
+        "id": "button_red.png",
+        "path": "./assets/ui/button_red.png",
+        "size_bytes": 41350,
+        "format": "png",
+        "dimensions": "348x75",
+        "has_alpha": true,
+        "type": "image"
+    },
+    {
+        "id": "bush_02.png",
+        "path": "./assets/scenery/bush_02.png",
+        "size_bytes": 185030,
+        "format": "png",
+        "dimensions": "384x384",
+        "has_alpha": true,
+        "type": "image"
+    },
+    {
+        "id": "bush_rock_01.png",
+        "path": "./assets/scenery/bush_rock_01.png",
+        "size_bytes": 188418,
+        "format": "png",
+        "dimensions": "384x384",
+        "has_alpha": true,
+        "type": "image"
+    },
+    {
+        "id": "road_sign_curve.png",
+        "path": "./assets/scenery/road_sign_curve.png",
+        "size_bytes": 60560,
+        "format": "png",
+        "dimensions": "384x384",
+        "has_alpha": true,
+        "type": "image"
+    },
+    {
+        "id": "rock_cluster_01.png",
+        "path": "./assets/scenery/rock_cluster_01.png",
+        "size_bytes": 129045,
+        "format": "png",
+        "dimensions": "384x384",
+        "has_alpha": true,
+        "type": "image"
+    },
+    {
+        "id": "tree_broadleaf_02.png",
+        "path": "./assets/scenery/tree_broadleaf_02.png",
+        "size_bytes": 166174,
+        "format": "png",
+        "dimensions": "384x384",
+        "has_alpha": true,
+        "type": "image"
+    },
+    {
+        "id": "tree_broadleaf_01.png",
+        "path": "./assets/scenery/tree_broadleaf_01.png",
+        "size_bytes": 141855,
+        "format": "png",
+        "dimensions": "384x384",
+        "has_alpha": true,
+        "type": "image"
+    },
+    {
+        "id": "guardrail_segment.png",
+        "path": "./assets/scenery/guardrail_segment.png",
+        "size_bytes": 61138,
+        "format": "png",
+        "dimensions": "384x384",
+        "has_alpha": true,
+        "type": "image"
+    },
+    {
+        "id": "road_sign_chevron.png",
+        "path": "./assets/scenery/road_sign_chevron.png",
+        "size_bytes": 68177,
+        "format": "png",
+        "dimensions": "384x384",
+        "has_alpha": true,
+        "type": "image"
+    },
+    {
+        "id": "tree_pine_01.png",
+        "path": "./assets/scenery/tree_pine_01.png",
+        "size_bytes": 129858,
+        "format": "png",
+        "dimensions": "384x384",
+        "has_alpha": true,
+        "type": "image"
+    },
+    {
+        "id": "tree_pine_02.png",
+        "path": "./assets/scenery/tree_pine_02.png",
+        "size_bytes": 129384,
+        "format": "png",
+        "dimensions": "384x384",
+        "has_alpha": true,
+        "type": "image"
+    },
+    {
+        "id": "streetlamp.png",
+        "path": "./assets/scenery/streetlamp.png",
+        "size_bytes": 29899,
+        "format": "png",
+        "dimensions": "384x384",
+        "has_alpha": true,
+        "type": "image"
+    },
+    {
+        "id": "tree_pine_03.png",
+        "path": "./assets/scenery/tree_pine_03.png",
+        "size_bytes": 121799,
+        "format": "png",
+        "dimensions": "384x384",
+        "has_alpha": true,
+        "type": "image"
+    },
+    {
+        "id": "scenery_sheet.png",
+        "path": "./assets/scenery/scenery_sheet.png",
+        "size_bytes": 2794934,
+        "format": "png",
+        "dimensions": "1448x1086",
+        "has_alpha": true,
+        "type": "image"
+    },
+    {
+        "id": "asphalt_shoulder.png",
+        "path": "./assets/road/asphalt_shoulder.png",
+        "size_bytes": 147213,
+        "format": "png",
+        "dimensions": "256x256",
+        "has_alpha": false,
+        "type": "image"
+    },
+    {
+        "id": "grass_texture.png",
+        "path": "./assets/road/grass_texture.png",
+        "size_bytes": 140909,
+        "format": "png",
+        "dimensions": "256x256",
+        "has_alpha": false,
+        "type": "image"
+    },
+    {
+        "id": "asphalt_lane.png",
+        "path": "./assets/road/asphalt_lane.png",
+        "size_bytes": 137239,
+        "format": "png",
+        "dimensions": "256x256",
+        "has_alpha": false,
+        "type": "image"
+    },
+    {
+        "id": "rumble_strip.png",
+        "path": "./assets/road/rumble_strip.png",
+        "size_bytes": 138850,
+        "format": "png",
+        "dimensions": "256x256",
+        "has_alpha": false,
+        "type": "image"
+    },
+    {
+        "id": "mountain_background.jpg",
+        "path": "./assets/backgrounds/mountain_background.jpg",
+        "size_bytes": 195947,
+        "format": "jpg",
+        "dimensions": "1600x600",
+        "has_alpha": false,
+        "type": "image"
+    },
+    {
+        "id": "player_bike_skid.png",
+        "path": "./assets/bikes/player_bike_skid.png",
+        "size_bytes": 81665,
+        "format": "png",
+        "dimensions": "256x256",
+        "has_alpha": true,
+        "type": "image"
+    },
+    {
+        "id": "player_bike_lean_right_deep.png",
+        "path": "./assets/bikes/player_bike_lean_right_deep.png",
+        "size_bytes": 86222,
+        "format": "png",
+        "dimensions": "256x256",
+        "has_alpha": true,
+        "type": "image"
+    },
+    {
+        "id": "player_bike_lean_right.png",
+        "path": "./assets/bikes/player_bike_lean_right.png",
+        "size_bytes": 63132,
+        "format": "png",
+        "dimensions": "256x256",
+        "has_alpha": true,
+        "type": "image"
+    },
+    {
+        "id": "player_bike_lean_left_deep.png",
+        "path": "./assets/bikes/player_bike_lean_left_deep.png",
+        "size_bytes": 85837,
+        "format": "png",
+        "dimensions": "256x256",
+        "has_alpha": true,
+        "type": "image"
+    },
+    {
+        "id": "player_bike_lean_left.png",
+        "path": "./assets/bikes/player_bike_lean_left.png",
+        "size_bytes": 2359201,
+        "format": "png",
+        "dimensions": "1536x1024",
+        "has_alpha": true,
+        "type": "image"
+    },
+    {
+        "id": "player_bike_upright.png",
+        "path": "./assets/bikes/player_bike_upright.png",
+        "size_bytes": 2359201,
+        "format": "png",
+        "dimensions": "1536x1024",
+        "has_alpha": true,
+        "type": "image"
+    },
+    {
+        "id": "dust_effect_large.png",
+        "path": "./assets/effects/dust_effect_large.png",
+        "size_bytes": 60003,
+        "format": "png",
+        "dimensions": "256x256",
+        "has_alpha": true,
+        "type": "image"
+    },
+    {
+        "id": "dust_effect_small.png",
+        "path": "./assets/effects/dust_effect_small.png",
+        "size_bytes": 46419,
+        "format": "png",
+        "dimensions": "256x256",
+        "has_alpha": true,
+        "type": "image"
+    },
+    {
+        "id": "impact_effect_small.png",
+        "path": "./assets/effects/impact_effect_small.png",
+        "size_bytes": 57508,
+        "format": "png",
+        "dimensions": "256x256",
+        "has_alpha": true,
+        "type": "image"
+    },
+    {
+        "id": "speed_spark.png",
+        "path": "./assets/effects/speed_spark.png",
+        "size_bytes": 20037,
+        "format": "png",
+        "dimensions": "256x256",
+        "has_alpha": true,
+        "type": "image"
+    },
+    {
+        "id": "sparks_effect.png",
+        "path": "./assets/effects/sparks_effect.png",
+        "size_bytes": 82077,
+        "format": "png",
+        "dimensions": "256x256",
+        "has_alpha": true,
+        "type": "image"
+    },
+    {
+        "id": "impact_effect_large.png",
+        "path": "./assets/effects/impact_effect_large.png",
+        "size_bytes": 74160,
+        "format": "png",
+        "dimensions": "256x256",
+        "has_alpha": true,
+        "type": "image"
+    },
+    {
+        "id": "smoke_effect.png",
+        "path": "./assets/effects/smoke_effect.png",
+        "size_bytes": 58719,
+        "format": "png",
+        "dimensions": "256x256",
+        "has_alpha": true,
+        "type": "image"
+    },
+    {
+        "id": "player_bike_sprite_sheet.png",
+        "path": "./source_sheets/player_bike_sprite_sheet.png",
+        "size_bytes": 2279006,
+        "format": "png",
+        "dimensions": "1536x1024",
+        "has_alpha": false,
+        "type": "image"
+    },
+    {
+        "id": "combined_racing_assets_sheet.png",
+        "path": "./source_sheets/combined_racing_assets_sheet.png",
+        "size_bytes": 2942398,
+        "format": "png",
+        "dimensions": "1536x1024",
+        "has_alpha": false,
+        "type": "image"
+    },
+    {
+        "id": "scenery_sprite_sheet.png",
+        "path": "./source_sheets/scenery_sprite_sheet.png",
+        "size_bytes": 2653304,
+        "format": "png",
+        "dimensions": "1448x1086",
+        "has_alpha": false,
+        "type": "image"
+    },
+    {
+        "id": "ui_effects_sheet.png",
+        "path": "./source_sheets/ui_effects_sheet.png",
+        "size_bytes": 2231633,
+        "format": "png",
+        "dimensions": "1536x1024",
+        "has_alpha": true,
+        "type": "image"
+    },
+    {
+        "id": "input-WHwY3yUFZlQ-jUvTc6aTEHaiQfrVKXMoCtnSwYrQ4rC6fsT-Hnq8pxAxXQTX---e7207623-c27d-45ca-8a15-6cbdd95e6ddf.jpg",
+        "path": "./media/inbound/openclaw-staged-10ed57bc-c981-4969-9bd9-215e1c789992/input-WHwY3yUFZlQ-jUvTc6aTEHaiQfrVKXMoCtnSwYrQ4rC6fsT-Hnq8pxAxXQTX---e7207623-c27d-45ca-8a15-6cbdd95e6ddf.jpg",
+        "size_bytes": 257559,
+        "format": "jpg",
+        "dimensions": "1920x1200",
+        "has_alpha": false,
+        "type": "image"
+    },
+    {
+        "id": "input-FobSzuuNBMTWACuY7aWjPSD86ds-MHJGW0w6m7GRur1ne2wIr0hMJgRlcRoR---402a5482-826e-4992-a2f4-56b1f83f225d.jpg",
+        "path": "./media/inbound/openclaw-staged-10ed57bc-c981-4969-9bd9-215e1c789992/input-FobSzuuNBMTWACuY7aWjPSD86ds-MHJGW0w6m7GRur1ne2wIr0hMJgRlcRoR---402a5482-826e-4992-a2f4-56b1f83f225d.jpg",
+        "size_bytes": 42688,
+        "format": "jpg",
+        "dimensions": "503x440",
+        "has_alpha": false,
+        "type": "image"
+    },
+    {
+        "id": "input-0smgfOOSYDlVtILR-bHX598qwyOA6C0jnA9w0mC5CM91HZEXqTWMq7LtMZBh---b0a121ee-9616-4f15-ba6b-db48721e32ce.jpg",
+        "path": "./media/inbound/openclaw-staged-10ed57bc-c981-4969-9bd9-215e1c789992/input-0smgfOOSYDlVtILR-bHX598qwyOA6C0jnA9w0mC5CM91HZEXqTWMq7LtMZBh---b0a121ee-9616-4f15-ba6b-db48721e32ce.jpg",
+        "size_bytes": 33043,
+        "format": "jpg",
+        "dimensions": "620x349",
+        "has_alpha": false,
+        "type": "image"
+    }
+]

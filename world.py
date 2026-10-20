@@ -3,6 +3,7 @@ import math
 import random
 import pygame
 from config import *
+from game.assets import assets
 
 
 class World:
