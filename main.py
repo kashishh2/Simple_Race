@@ -249,9 +249,11 @@ class Game:
             scale=max(0.12,min(1.30,scale))
             rival.draw(self.screen,x,y,scale,False)
 
-        # The road's foreground is the player's reference frame; lateral drift
-        # moves the vehicle across it instead of visually auto-centering the sprite.
-        player_center=SCREEN_WIDTH/2+self.player.lane*250
+        # Position the bike relative to the actual foreground road center. The road
+        # itself now sweeps sideways through bends, so an uncorrected bike visibly
+        # drifts toward the road edge instead of being screen-centered automatically.
+        road_center=self.world.road_center_at_depth(0)
+        player_center=road_center+self.player.lane*250
         self.player.draw_player(self.screen,player_center)
         remaining=max(0,FINISH_LINE_DISTANCE-self.player.progress)
         self.hud.draw(self.screen,self.time_left,self.player.speed,self.score,
